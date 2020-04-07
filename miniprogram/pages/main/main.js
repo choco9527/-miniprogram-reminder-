@@ -1,11 +1,11 @@
 const {
   formatTime
 } = require('../../utils/util.js');
+const db = wx.cloud.database()
+const TODOS = db.collection('todos')
+const app = getApp()
 Page({
 
-  /**
-   * 页面的初始数据
-   */
   data: {
     remindList: [{
         isCompleted: false,
@@ -41,12 +41,24 @@ Page({
     timer: null
   },
   onLoad() {
+		if (app.globalData.openid) {
+			this.setData({
+				openid: app.globalData.openid
+			})
+		}
+
     let that = this
     let remindList = [...that.data.remindList]
 
     remindList.forEach(item => {
       item.formDate = that.formatDate(item.date)
     })
+
+		TODOS.where({
+			_openid: this.data.openid
+		}).get().then(res => {
+			console.log(res)
+		})
 
     that.setData({
       remindList
@@ -82,14 +94,25 @@ Page({
   },
   newRemind(e) {
     let remindList = [...this.data.remindList]
+
     remindList.push({
       isCompleted: false,
       title: '',
+			remark: '',
       date: '',
-      time: '',
+			formDate: '',
       repeat: '',
       focus: true
     })
+		
+		// TODOS.add({
+		// 	data:{
+
+		// 	}
+		// })
+		// .then(res=>{
+		// 	console.log(res)
+		// })
 
     this.setData({
       remindList
