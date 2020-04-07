@@ -7,116 +7,100 @@ const app = getApp()
 Page({
 
   data: {
-    remindList: [{
-        isCompleted: false,
-        title: '摇号延期',
-        remark: '',
-        date: new Date().getTime(),
-        formDate: '',
-        repeat: '每周',
-        focus: false
-      },
-      {
-        isCompleted: false,
-        title: 'eee',
-        remark: '22',
-        date: new Date().getTime(),
-        formDate: '',
-        repeat: '每天',
-        focus: false
-      },
-      {
-        isCompleted: false,
-        title: 'www',
-        remark: 'w备注',
-        date: '',
-        formDate: '',
-        repeat: '每天',
-        focus: false
-      }
+    remindList: [
+      // {
+      //   isCompleted: false,
+      //   title: '摇号延期',
+      //   remark: '',
+      //   date: new Date().getTime(),
+      //   formDate: '',
+      //   repeat: '每周',
+      //   focus: false
+      // }
     ],
     popupItem: null,
     popupIndex: -1,
     showPopup: false,
-    timer: null
+    timer: null,
+    openid: '',
+    counterId: ''
   },
   onLoad() {
-		if (app.globalData.openid) {
-			this.setData({
-				openid: app.globalData.openid
-			})
-		}
-
+    if (app.globalData.openid) {
+      this.setData({
+        openid: app.globalData.openid
+      })
+    }
     let that = this
-    let remindList = [...that.data.remindList]
+    TODOS.where({
+      _openid: that.data.openid
+    }).get().then(res => { // 获取列表
+      // console.log(res)
+      let remindList = [...res.data[0].remindList],
+        counterId = res.data[0]._id
 
-    remindList.forEach(item => {
-      item.formDate = that.formatDate(item.date)
+      remindList.forEach(item => {
+        item.formDate = that._formatDate(item.date)
+      })
+
+      that.setData({
+        remindList,
+        counterId
+      })
     })
-
-		TODOS.where({
-			_openid: this.data.openid
-		}).get().then(res => {
-			console.log(res)
-		})
-
-    that.setData({
-      remindList
-    })
-
   },
-  formatDate(date) {
+  _formatDate(date) {
     if (date === '') return ''
     let newDate = new Date(date)
     return formatTime(newDate)
   },
+  updateCloudList() { // 更新数据库
+    console.log('updateCloud')
+    let remindList = [...this.data.remindList]
+    TODOS.doc(this.data.counterId).update({
+      data: {
+        remindList
+      }
+    })
+  },
   onChangeCom(e) { // 点击完成按钮
-    // console.log(e);
 
     let i = e.currentTarget.dataset.index,
       that = this,
       remindList = [...that.data.remindList]
     remindList[i].isCompleted = !remindList[i].isCompleted
-    console.log(remindList[i]);
+    // console.log(remindList[i]);
 
     let timer = setTimeout(() => { // 1s后删除
       if ((!!remindList[i].isCompleted && !remindList[i].date) || remindList[i].repeat === '永不') {
         remindList.splice(i, 1)
+        that.setData({
+          remindList
+        }, that.updateCloudList)
       }
-      that.setData({
-        remindList
-      })
     }, 1000)
     that.setData({
       remindList,
       timer
-    })
+    }, that.updateCloudList)
   },
   newRemind(e) {
-    let remindList = [...this.data.remindList]
+    let that = this,
+      remindList = [...that.data.remindList]
 
     remindList.push({
       isCompleted: false,
       title: '',
-			remark: '',
+      remark: '',
       date: '',
-			formDate: '',
+      formDate: '',
       repeat: '',
       focus: true
     })
-		
-		// TODOS.add({
-		// 	data:{
 
-		// 	}
-		// })
-		// .then(res=>{
-		// 	console.log(res)
-		// })
-
-    this.setData({
+    that.setData({
       remindList
-    })
+    }, that.updateCloudList)
   },
   inputBlur(e) { // 保存事项，删除空事项
     // console.log(e);
@@ -132,7 +116,7 @@ Page({
     }
     that.setData({
       remindList
-    })
+    }, that.updateCloudList)
   },
   inputChange(e) {
     let that = this
@@ -143,25 +127,28 @@ Page({
       remindList[i].title = e.detail.value
       that.setData({
         remindList
-      })
+      }, that.updateCloudList)
     }, 500)
     that.setData({
       timer
     })
   },
   inputFocus(e) {
+
     clearTimeout(this.data.timer) // 清除（删除）定时器
     let i = e.currentTarget.dataset.index,
-      remindList = [...this.data.remindList]
+      remindList = [...this.data.remindList],
+      that = this;
     remindList[i].focus = true
-    this.setData({
+    that.setData({
       remindList
-    })
+    }, that.updateCloudList)
   },
   showDetail(e) { // 显示详情
     let popupItem = e.currentTarget.dataset.item,
-      popupIndex = e.currentTarget.dataset.index
-    this.setData({
+      popupIndex = e.currentTarget.dataset.index,
+      that = this;
+    that.setData({
       showPopup: true,
       popupItem,
       popupIndex
@@ -182,11 +169,11 @@ Page({
     if (i === -1) return
 
     remindList[i] = e.detail
-    remindList[i].formDate = that.formatDate(remindList[i].date)
+    remindList[i].formDate = that._formatDate(remindList[i].date)
 
     that.setData({
       remindList
-    })
+    },that.updateCloudList)
   }
 
 })
