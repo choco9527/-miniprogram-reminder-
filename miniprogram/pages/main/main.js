@@ -36,17 +36,61 @@ Page({
       _openid: that.data.openid
     }).get().then(res => { // 获取列表
       // console.log(res)
-      let remindList = [...res.data[0].remindList],
-        counterId = res.data[0]._id
+      if (res.data.length > 0) {
+        let remindList = [...res.data[0].remindList],
+          counterId = res.data[0]._id
 
-      remindList.forEach(item => {
-        item.formDate = that._formatDate(item.date)
-      })
+        remindList.forEach(item => {
+          item.formDate = that._formatDate(item.date)
+        })
 
-      that.setData({
-        remindList,
-        counterId
+        that.setData({
+          remindList,
+          counterId
+        })
+      } else { // 如无该用户数据库则添加
+        TODOS.add({
+          data: {
+            remindList: []
+          }
+        }).then(res => {
+          that.setData({
+            counterId: res._id
+          })
+        })
+      }
+
+    }).catch(rea => {
+      wx: wx.showToast({
+        title: '获取列表失败',
+        icon: 'none',
+        image: '',
+        duration: 1000,
+        mask: true
       })
+    })
+  },
+  onPullDownRefresh() {
+		let that = this
+    TODOS.where({
+      _openid: that.data.openid
+    }).get().then(res => {
+      if (res.data.length > 0) {
+        let remindList = [...res.data[0].remindList],
+          counterId = res.data[0]._id
+        that.setData({
+          remindList,
+					counterId
+        })
+				wx: wx.showToast({
+					title: '刷新成功',
+					icon: '',
+					image: '',
+					duration: 800,
+					mask: true
+				})
+      }
+			wx.stopPullDownRefresh()
     })
   },
   _formatDate(date) {
@@ -173,7 +217,7 @@ Page({
 
     that.setData({
       remindList
-    },that.updateCloudList)
+    }, that.updateCloudList)
   }
 
 })

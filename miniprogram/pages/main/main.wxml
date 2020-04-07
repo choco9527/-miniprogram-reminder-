@@ -1,6 +1,8 @@
 <view class="scroll-container">
   <view class="remind-top">
-    <text class="title">Just Remind</text>
+    <text class="title" wx:if="{{remindList.length > 0}}">Just Remind</text>
+    <text class="title" wx:else>Add My Remind</text>
+
   </view>
   <view class="remind-list">
     <view class="remind-item" wx:for="{{remindList}}" wx:key="index">

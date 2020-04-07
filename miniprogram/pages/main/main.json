@@ -1,5 +1,6 @@
 {
   "usingComponents": {
     "Detail":	"../pages/detail/detail"
-  }
+  },
+	"enablePullDownRefresh": true
 }
