@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "Detail":	"../pages/detail/detail"
+  }
+}

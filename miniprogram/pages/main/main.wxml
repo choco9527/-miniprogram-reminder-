@@ -1,0 +1,41 @@
+<view class="scroll-container">
+  <view class="remind-top">
+    <text class="title">Just Remind</text>
+  </view>
+  <view class="remind-list">
+    <view class="remind-item" wx:for="{{remindList}}" wx:key="index">
+      <view class="remind-item_btn" data-index="{{index}}" bindtap="onChangeCom">
+        <view class="btn-wrapper">
+          <view class="{{item.isCompleted ? 'inner-btnCom' : 'inner-btn'}}"></view>
+        </view>
+      </view>
+      <view class="remind-item_mid">
+        <input class="item-input" focus="{{item.focus}}" type="text" value="{{item.title}}" maxlength="15" data-index="{{index}}" bindfocus="inputFocus" bindblur="inputBlur" bindinput="inputChange" />
+        <view class="item-setTime" wx:if="{{!!item.date}}">
+          <text class="setTime-date" selectable="false" space="false" decode="false">
+            {{item.formDate}}
+          </text>
+          <text class="item-every" selectable="false" space="false" decode="false">
+            {{item.repeat}}
+          </text>
+        </view>
+        <text wx:if="{{item.remark}}" class="item-remark">{{item.remark}}</text>
+      </view>
+      <view wx:if="{{item.focus}}" class="remind-right">
+        <image style="width:64rpx;height:64rpx" class="right-info" src="../../images/info.png" mode="aspectFit" data-item="{{item}}" data-index="{{index}}" bindtap="showDetail" />
+      </view>
+    </view>
+  </view>
+</view>
+<!-- 详情弹出层start -->
+<van-popup show="{{ showPopup }}" position="bottom" closeable close-icon="success" bind:close="onCloseDeta" duration="160" custom-style="height:90%;background-color:#FFE4E1">
+  <!-- Detail子组件 -->
+  <Detail bindsaveRemind="saveByDetail" prop-item="{{popupItem}}"></Detail>
+</van-popup>
+<!-- 详情弹出层end -->
+<!-- 新建事项start -->
+<view class="remind-bottom" bindtap="newRemind">
+  <image style="width:56rpx;height:56rpx;margin:0 22rpx 0 36rpx" class="right-info" src="../../images/add.png" mode="aspectFit" />
+  <text class="new-remind">新提醒事项</text>
+</view>
+<!-- 新建事项end -->

@@ -1,0 +1,30 @@
+<view class="detail-container">
+  <view class="detail-title">
+    <text>详细信息</text>
+  </view>
+  <view class="detail-input">
+    <van-cell-group>
+      <van-field value="{{ item.title }}" placeholder="标题" border="{{ true }}" bind:change="onTitleChange" maxlength="{{15}}" />
+      <van-field value="{{ item.remark }}" placeholder="备注" border="{{ true }}" bind:change="onRemindChange" maxlength="{{42}}" />
+    </van-cell-group>
+  </view>
+  <view class="detail-timer">
+    <van-cell-group>
+      <van-cell title="在指定日期提醒我" size="large" center="{{true}}">
+        <van-switch slot="right-icon" size="24px" active-color="#07c160" inactive-color="#F8F6F6" checked="{{ isOnDate }}" bind:change="onDateSelec" />
+      </van-cell>
+      <van-transition show="{{ isOnDate }}" custom-class="block" name="fade">
+        <van-cell title="闹钟" value="{{dateText}}" size="large" center="{{true}}" bind:click="isDatePick"></van-cell>
+        <van-transition show="{{ showDatePick }}" custom-class="block" name="slide-left">
+          <van-datetime-picker type="datetime" value="{{ currentDate }}" bind:input="onTimeInput" formatter="{{ formatter }}" bind:confirm="onComfirm" bind:cancel="onCancel" />
+        </van-transition>
+        <van-cell bind:click="isRepeat" is-link value="{{item.repeat}}" title="重复" size="large" center="{{true}}"></van-cell>
+      </van-transition>
+    </van-cell-group>
+  </view>
+  <van-popup show="{{ showRepeatPopup }}" position="right" duration="160" custom-style="height:100%;width:80%;background-color:#FFE4E1">
+    <van-cell-group wx:for="{{repeatList}}" wx:key="index">
+      <van-cell bind:click="selectRepeat" is-link data-target="{{item}}" title="{{item}}" size="large" center="{{true}}"></van-cell>
+    </van-cell-group>
+  </van-popup>
+</view>
