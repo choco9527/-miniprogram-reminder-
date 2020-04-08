@@ -86,10 +86,8 @@ Component({
       var that = this
       clearTimeout(that.data.timer) // 防抖
       var timer = setTimeout(() => {
-        let item = this.data.item
-        item.title = e.detail
         that.setData({
-          item
+					'item.title': e.detail
         })
         that.saveItem()
       }, 500)
@@ -101,10 +99,8 @@ Component({
       var that = this
       clearTimeout(this.data.timer)
       var timer = setTimeout(() => {
-        let item = this.data.item
-        item.remark = e.detail
         that.setData({
-          item
+					'item.remark': e.detail
         })
         that.saveItem()
       }, 500)
@@ -114,17 +110,17 @@ Component({
     },
     onDateSelec() { // 日期选择
       var that = this,
-        item = this.data.item,
-        isOnDate = that.data.isOnDate
+        isOnDate = that.data.isOnDate,
+        date = '';
 
       if (isOnDate) {
-        item.date = ''
+        date = ''
       } else {
-        item.date = that.data.currentDate
+        date = that.data.currentDate
       }
       that.setData({
         isOnDate: !isOnDate,
-        item
+        'item.date': date
       })
       that.saveItem()
     },
@@ -139,14 +135,12 @@ Component({
       })
     },
     onComfirm() {
-      var dateText = !!this.data.currentDate ? formatTime(new Date(this.data.currentDate)) : '',
-        item = this.data.item;
-      item.date = this.data.currentDate
+      var dateText = !!this.data.currentDate ? formatTime(new Date(this.data.currentDate)) : '';
 
       this.setData({
         showDatePick: false,
         dateText,
-        item
+        'item.date': this.data.currentDate
       })
       this.saveItem()
     },
@@ -163,13 +157,11 @@ Component({
     },
     selectRepeat(e) { // 选择重复周期
 
-			let howToRepeat = e.detail,
-        item = this.data.item;
-			console.log(howToRepeat)
-      item.repeat = howToRepeat
+      let howToRepeat = e.detail
+      console.log(howToRepeat)
       this.setData({
         showRepeatPopup: false,
-        item
+        'item.repeat': howToRepeat
       });
       this.saveItem()
     }

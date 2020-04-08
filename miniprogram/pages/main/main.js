@@ -1,9 +1,10 @@
-const {
-  formatTime
-} = require('../../utils/util.js');
+import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify.js';
+
+const {formatTime} = require('../../utils/util.js');
 const db = wx.cloud.database()
 const TODOS = db.collection('todos')
 const app = getApp()
+
 Page({
 
   data: {
@@ -23,7 +24,8 @@ Page({
     showPopup: false,
     timer: null,
     openid: '',
-    counterId: ''
+    counterId: '',
+		triggered: false
   },
   onLoad() {
     if (app.globalData.openid) {
@@ -70,29 +72,24 @@ Page({
       })
     })
   },
-  onPullDownRefresh() {
-    let that = this
-    TODOS.where({
-      _openid: that.data.openid
-    }).get().then(res => {
-      if (res.data.length > 0) {
-        let remindList = [...res.data[0].remindList],
-          counterId = res.data[0]._id
-        that.setData({
-          remindList,
-          counterId
-        })
-        wx: wx.showToast({
-          title: '刷新成功',
-          icon: '',
-          image: '',
-          duration: 800,
-          mask: true
-        })
-      }
-      wx.stopPullDownRefresh()
-    })
-  },
+	onRefresh(){
+		let that = this
+		TODOS.where({
+			_openid: that.data.openid
+		}).get().then(res => {
+			if (res.data.length > 0) {
+				let remindList = [...res.data[0].remindList],
+					counterId = res.data[0]._id
+				that.setData({
+					remindList,
+					counterId,
+					triggered:false
+				})
+				Notify({ type: 'success', message: '刷新成功', background:'#FFDAB9', duration: 666});
+			}
+		})
+	},
+
   _formatDate(date) {
     if (date === '') return ''
     let newDate = new Date(date)
@@ -138,7 +135,10 @@ Page({
       remark: '',
       date: '',
       formDate: '',
-      repeat: '永不',
+      repeat: {
+        name: '永不',
+        type: 0
+      },
       focus: true
     })
 

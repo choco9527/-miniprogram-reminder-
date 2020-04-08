@@ -12,14 +12,15 @@
 		"navigationBarTextStyle": "black"
 	},
 	"usingComponents": {
-    "van-popup": "@vant/weapp/popup/index",
-     "van-field": "@vant/weapp/field/index",
-     "van-cell": "@vant/weapp/cell/index",
-     "van-cell-group": "@vant/weapp/cell-group/index",
-     "van-switch": "@vant/weapp/switch/index",
-     "van-transition": "@vant/weapp/transition/index",
-     "van-datetime-picker": "@vant/weapp/datetime-picker/index",
-			"van-action-sheet": "@vant/weapp/action-sheet/index"
+		"van-popup": "@vant/weapp/popup/index",
+		"van-field": "@vant/weapp/field/index",
+		"van-cell": "@vant/weapp/cell/index",
+		"van-cell-group": "@vant/weapp/cell-group/index",
+		"van-switch": "@vant/weapp/switch/index",
+		"van-transition": "@vant/weapp/transition/index",
+		"van-datetime-picker": "@vant/weapp/datetime-picker/index",
+		"van-action-sheet": "@vant/weapp/action-sheet/index",
+		"van-notify": "@vant/weapp/notify/index"
 	},
 	"sitemapLocation": "sitemap.json"
 }

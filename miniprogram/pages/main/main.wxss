@@ -7,13 +7,12 @@ page {
   background-color: rgb(248, 246, 246);
 }
 
-.scroll-container {
+/* .scroll-container {
   max-height: 1200rpx;
   height: 100%;
   overflow-y: scroll;
   padding-bottom: 50rpx;
-
-}
+} */
 
 .remind-top {
   display: flex;
