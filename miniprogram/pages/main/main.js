@@ -14,7 +14,7 @@ Page({
       //   remark: '',
       //   date: new Date().getTime(),
       //   formDate: '',
-      //   repeat: '每周',
+      //   repeat: {name:'永不',type:0},
       //   focus: false
       // }
     ],
@@ -71,7 +71,7 @@ Page({
     })
   },
   onPullDownRefresh() {
-		let that = this
+    let that = this
     TODOS.where({
       _openid: that.data.openid
     }).get().then(res => {
@@ -80,17 +80,17 @@ Page({
           counterId = res.data[0]._id
         that.setData({
           remindList,
-					counterId
+          counterId
         })
-				wx: wx.showToast({
-					title: '刷新成功',
-					icon: '',
-					image: '',
-					duration: 800,
-					mask: true
-				})
+        wx: wx.showToast({
+          title: '刷新成功',
+          icon: '',
+          image: '',
+          duration: 800,
+          mask: true
+        })
       }
-			wx.stopPullDownRefresh()
+      wx.stopPullDownRefresh()
     })
   },
   _formatDate(date) {
@@ -138,7 +138,7 @@ Page({
       remark: '',
       date: '',
       formDate: '',
-      repeat: '',
+      repeat: '永不',
       focus: true
     })
 

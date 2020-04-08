@@ -18,7 +18,7 @@
             {{item.formDate}}
           </text>
           <text class="item-every" selectable="false" space="false" decode="false">
-            {{item.repeat}}
+            {{item.repeat.name}}
           </text>
         </view>
         <text wx:if="{{item.remark}}" class="item-remark">{{item.remark}}</text>

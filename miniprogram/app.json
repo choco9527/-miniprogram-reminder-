@@ -18,7 +18,8 @@
      "van-cell-group": "@vant/weapp/cell-group/index",
      "van-switch": "@vant/weapp/switch/index",
      "van-transition": "@vant/weapp/transition/index",
-     "van-datetime-picker": "@vant/weapp/datetime-picker/index"
+     "van-datetime-picker": "@vant/weapp/datetime-picker/index",
+			"van-action-sheet": "@vant/weapp/action-sheet/index"
 	},
 	"sitemapLocation": "sitemap.json"
 }
