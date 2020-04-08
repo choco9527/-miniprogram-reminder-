@@ -113,7 +113,7 @@ Page({
     // console.log(remindList[i]);
 
     let timer = setTimeout(() => { // 1s后删除
-      if ((!!remindList[i].isCompleted && !remindList[i].date) || remindList[i].repeat === '永不') {
+      if ((!!remindList[i].isCompleted && !remindList[i].date) || remindList[i].repeat.type === 0) {
         remindList.splice(i, 1)
         that.setData({
           remindList
@@ -147,7 +147,7 @@ Page({
     }, that.updateCloudList)
   },
   inputBlur(e) { // 保存事项，删除空事项
-    // console.log(e);
+    console.log('blur');
     let that = this,
       i = e.currentTarget.dataset.index,
       remindList = [...that.data.remindList]
@@ -163,6 +163,8 @@ Page({
     }, that.updateCloudList)
   },
   inputChange(e) {
+		console.log('change');
+
     let that = this
     clearTimeout(that.data.timer) // 输入防抖
     let timer = setTimeout(() => {
@@ -178,6 +180,7 @@ Page({
     })
   },
   inputFocus(e) {
+		console.log('focus');
 
     clearTimeout(this.data.timer) // 清除（删除）定时器
     let i = e.currentTarget.dataset.index,

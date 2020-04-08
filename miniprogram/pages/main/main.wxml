@@ -10,17 +10,16 @@ enable-back-to-top="{{true}}"
 refresher-enabled="{{true}}"
 refresher-threshold="{{100}}"
 refresher-triggered="{{triggered}}" 
-bindrefresherrefresh="onRefresh" 
-bindrefresherrestore="onRestore">
+bindrefresherrefresh="onRefresh" >
   <view class="remind-list">
     <view class="remind-item" wx:for="{{remindList}}" wx:key="index">
-      <view class="remind-item_btn" data-index="{{index}}" bindtap="onChangeCom">
+      <view class="remind-item_btn" data-index="{{index}}" catchtap="onChangeCom">
         <view class="btn-wrapper">
           <view class="{{item.isCompleted ? 'inner-btnCom' : 'inner-btn'}}"></view>
         </view>
       </view>
       <view class="remind-item_mid">
-        <input class="item-input" focus="{{item.focus}}" type="text" value="{{item.title}}" maxlength="15" data-index="{{index}}" bindfocus="inputFocus" bindblur="inputBlur" bindinput="inputChange" />
+        <input class="item-input" focus="{{item.focus}}" type="text" value="{{item.title}}" maxlength="15" data-index="{{index}}" catchfocus="inputFocus" bindblur="inputBlur" disabled="{{showPopup}}" bindinput="inputChange" focus="{{item.focus}}"/>
         <view class="item-setTime" wx:if="{{!!item.date}}">
           <text class="setTime-date" selectable="false" space="false" decode="false">
             {{item.formDate}}
@@ -32,7 +31,7 @@ bindrefresherrestore="onRestore">
         <text wx:if="{{item.remark}}" class="item-remark">{{item.remark}}</text>
       </view>
       <view wx:if="{{item.focus}}" class="remind-right">
-        <image style="width:64rpx;height:64rpx" class="right-info" src="../../images/info.png" mode="aspectFit" data-item="{{item}}" data-index="{{index}}" bindtap="showDetail" />
+        <image style="width:64rpx;height:64rpx" class="right-info" src="../../images/info.png" mode="aspectFit" data-item="{{item}}" data-index="{{index}}" catchtap="showDetail" />
       </view>
     </view>
   </view>
