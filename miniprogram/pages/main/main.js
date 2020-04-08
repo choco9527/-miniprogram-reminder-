@@ -4,9 +4,9 @@ const {formatTime} = require('../../utils/util.js');
 const db = wx.cloud.database()
 const TODOS = db.collection('todos')
 const app = getApp()
+const templateId = '_Czn6Rny00Y5EBY9nzVFvzhwvu3ManUnwCGSodOHvEw' ;
 
 Page({
-
   data: {
     remindList: [
       // {
@@ -33,17 +33,19 @@ Page({
         openid: app.globalData.openid
       })
     }
+		console.log(this.data.openid)
     let that = this
     TODOS.where({
       _openid: that.data.openid
-    }).get().then(res => { // 获取列表
+    }).get()
+		.then(res => { // 获取列表
       // console.log(res)
       if (res.data.length > 0) {
         let remindList = [...res.data[0].remindList],
           counterId = res.data[0]._id
 
         remindList.forEach(item => {
-          item.formDate = that._formatDate(item.date)
+					item.formDate = formatTime(item.date)
         })
 
         that.setData({
@@ -61,9 +63,8 @@ Page({
           })
         })
       }
-
     }).catch(rea => {
-      wx: wx.showToast({
+       wx.showToast({
         title: '获取列表失败',
         icon: 'none',
         image: '',
@@ -89,14 +90,8 @@ Page({
 			}
 		})
 	},
-
-  _formatDate(date) {
-    if (date === '') return ''
-    let newDate = new Date(date)
-    return formatTime(newDate)
-  },
   updateCloudList() { // 更新数据库
-    console.log('updateCloud')
+    // console.log('updateCloud')
     let remindList = [...this.data.remindList]
     TODOS.doc(this.data.counterId).update({
       data: {
@@ -125,29 +120,48 @@ Page({
       timer
     }, that.updateCloudList)
   },
-  newRemind(e) {
+  newRemind(e) { // 新待办，设置订阅
     let that = this,
       remindList = [...that.data.remindList]
+		// console.log('消息订阅调起')
+		wx.requestSubscribeMessage({
+			tmplIds: [templateId],
+			success(res) {
+					if (res[templateId] == 'accept') {
+						//用户同意了订阅，允许订阅消息
+						remindList.push({
+							isCompleted: false,
+							title: '',
+							remark: '',
+							date: '',
+							formDate: '',
+							repeat: {
+								name: '永不',
+								type: 0
+							},
+							focus: true
+						})
 
-    remindList.push({
-      isCompleted: false,
-      title: '',
-      remark: '',
-      date: '',
-      formDate: '',
-      repeat: {
-        name: '永不',
-        type: 0
-      },
-      focus: true
-    })
+						that.setData({
+							remindList
+						}, that.updateCloudList)
 
-    that.setData({
-      remindList
-    }, that.updateCloudList)
+					} else {
+						//用户拒绝了订阅，禁用订阅消息
+						Notify({ type: 'warning', message: '请允许订阅提醒', background: '#FF7F50', duration: 1000 });
+					}
+			},
+			fail(err) {
+				wx.showToast({
+					title: '订阅调起失败'
+				})
+				console.error(err)
+			}
+		})
+
   },
   inputBlur(e) { // 保存事项，删除空事项
-    console.log('blur');
+    // console.log('blur');
     let that = this,
       i = e.currentTarget.dataset.index,
       remindList = [...that.data.remindList]
@@ -163,7 +177,7 @@ Page({
     }, that.updateCloudList)
   },
   inputChange(e) {
-		console.log('change');
+		// console.log('change');
 
     let that = this
     clearTimeout(that.data.timer) // 输入防抖
@@ -180,7 +194,7 @@ Page({
     })
   },
   inputFocus(e) {
-		console.log('focus');
+		// console.log('focus');
 
     clearTimeout(this.data.timer) // 清除（删除）定时器
     let i = e.currentTarget.dataset.index,
@@ -201,7 +215,8 @@ Page({
       popupIndex
     });
   },
-  onCloseDeta() { // 关闭详情
+  onCloseDeta() {
+		// console.log('关闭详情')
     this.setData({
       showPopup: false,
       popupIndex: -1
@@ -216,11 +231,34 @@ Page({
     if (i === -1) return
 
     remindList[i] = e.detail
-    remindList[i].formDate = that._formatDate(remindList[i].date)
+		remindList[i].formDate = formatTime(remindList[i].date)
 
     that.setData({
       remindList
     }, that.updateCloudList)
-  }
-
+  },
+	sendMe () {
+		// console.log('发送订阅')
+	let that=this
+		if(!that.data.counterId){
+			Notify({ type: 'warning', message: '无数据', background: '#FF7F50', duration: 1000 });
+			return
+		}
+		wx.cloud.callFunction({
+			name: 'msgMe',
+			data:{
+				taskId: that.data.counterId,
+				index: 0
+			}
+		}).then(res => {
+			console.log(res)
+			if(res.result.errCode === 0) {
+				Notify({ type: 'success', message: '提醒成功', background: '#FFDAB9', duration: 666 });
+			}else{
+				Notify({ type: 'warning', message: '提醒失败', background: '#FF7F50', duration: 1000 });
+			}
+		}).catch(err => {
+			console.error(err)
+		})
+	}
 })
