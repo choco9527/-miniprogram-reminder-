@@ -52,9 +52,9 @@ Component({
   },
   observers: {
     'propItem': function(newVal) {
-      let date = !!newVal ? !!newVal.date ? newVal.date : new Date().getTime() : ''
+			let date = !!newVal ? !!newVal.date.dateStr ? newVal.date.dateStr : new Date().getTime() : ''
       let dateText = !!date ? formatTime(new Date(date)) : ''
-      let isOnDate = !!newVal ? !!newVal.date : false
+      let isOnDate = !!newVal ? !!newVal.date.dateStr : false
       this.setData({
         item: newVal,
         currentDate: date,
@@ -108,19 +108,21 @@ Component({
         timer
       })
     },
-    onDateSelec() { // 日期选择
+    onDateSelec() { // 开启日期选择
       var that = this,
         isOnDate = that.data.isOnDate,
-        date = '';
+				date = '', DateObj = null;
 
       if (isOnDate) {
         date = ''
       } else {
         date = that.data.currentDate
+				DateObj = new Date(date)
       }
       that.setData({
         isOnDate: !isOnDate,
-        'item.date': date
+        'item.date.dateStr': date,
+				'item.date.DateObj': DateObj
       })
       that.saveItem()
     },
@@ -134,13 +136,15 @@ Component({
         showDatePick: true
       })
     },
-    onComfirm() {
+    onComfirm() { // 确认时间选择
+		let that = this
       var dateText = !!this.data.currentDate ? formatTime(new Date(this.data.currentDate)) : '';
 
       this.setData({
         showDatePick: false,
         dateText,
-        'item.date': this.data.currentDate
+				'item.date.dateStr': that.data.currentDate,
+				'item.date.DateObj': formatTime(that.data.currentDate)
       })
       this.saveItem()
     },

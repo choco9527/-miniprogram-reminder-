@@ -13,8 +13,12 @@ Page({
       //   isCompleted: false,
       //   title: '摇号延期',
       //   remark: '',
-      //   date: new Date().getTime(),
-      //   formDate: '',
+			// 		date: {
+			// 		formaDate: 'Y年M月D日 h:m', // 表述时间
+			// 		formaDate1: '昨天', // 语义化的时间
+			// 		DateObj: null, // 时间对象
+			// 		dateStr: '' // 时间戳
+			// 			},
       //   repeat: {name:'永不',type:0},
       //   focus: false
       // }
@@ -32,7 +36,18 @@ Page({
       this.setData({
         openid: app.globalData.openid
       })
-    }
+    }else{
+			wx.cloud.callFunction({
+				name: 'login',
+				data: {},
+				success: res => {
+					app.globalData.openid = res.result.openid
+					this.setData({
+						openid: app.globalData.openid
+					})
+				}
+			})
+		}
 		console.log(this.data.openid)
     let that = this
     TODOS.where({
@@ -43,9 +58,8 @@ Page({
       if (res.data.length > 0) {
         let remindList = [...res.data[0].remindList],
           counterId = res.data[0]._id
-
         remindList.forEach(item => {
-					item.formDate = formatTime(item.date)
+					item.date.formaDate = formatTime(item.date.dateStr)
         })
 
         that.setData({
@@ -133,8 +147,12 @@ Page({
 							isCompleted: false,
 							title: '',
 							remark: '',
-							date: '',
-							formDate: '',
+							date: {
+								formaDate: '',
+								formaDate1: '',
+								DateObj: null,
+								dateStr: '' // 时间戳
+							},
 							repeat: {
 								name: '永不',
 								type: 0
@@ -223,42 +241,18 @@ Page({
     });
   },
   saveByDetail(e) { // 子组件触发保存
-    // console.log('触发保存', remindList[i]);
 
     let that = this
     let remindList = [...that.data.remindList],
       i = that.data.popupIndex;
     if (i === -1) return
+		// console.log('触发保存', remindList[i]);
 
     remindList[i] = e.detail
-		remindList[i].formDate = formatTime(remindList[i].date)
+		remindList[i].date.formaDate = formatTime(remindList[i].date.dateStr)
 
     that.setData({
       remindList
     }, that.updateCloudList)
-  },
-	sendMe () {
-		// console.log('发送订阅')
-	let that=this
-		if(!that.data.counterId){
-			Notify({ type: 'warning', message: '无数据', background: '#FF7F50', duration: 1000 });
-			return
-		}
-		wx.cloud.callFunction({
-			name: 'msgMe',
-			data:{
-				taskId: that.data.counterId,
-				index: 0
-			}
-		}).then(res => {
-			console.log(res)
-			if(res.result.errCode === 0) {
-				Notify({ type: 'success', message: '提醒成功', background: '#FFDAB9', duration: 666 });
-			}else{
-				Notify({ type: 'warning', message: '提醒失败', background: '#FF7F50', duration: 1000 });
-			}
-		}).catch(err => {
-			console.error(err)
-		})
-	}
+  }
 })

@@ -1,6 +1,6 @@
 <van-notify id="van-notify" />
 <view class="remind-top">
-  <text class="title" wx:if="{{remindList.length > 0}}"  bindtap="sendMe">Just Remind</text>
+  <text class="title" wx:if="{{remindList.length > 0}}" >Just Remind</text>
   <text class="title" wx:else>Add My Remind</text>
 </view>
 <scroll-view scroll-y="{{true}}" 
@@ -19,9 +19,9 @@ bindrefresherrefresh="onRefresh" >
       </view>
       <view class="remind-item_mid">
         <input class="item-input" focus="{{item.focus}}" type="text" value="{{item.title}}" maxlength="15" data-index="{{index}}" catchfocus="inputFocus" bindblur="inputBlur" disabled="{{showPopup}}" bindinput="inputChange" focus="{{item.focus}}"/>
-        <view class="item-setTime" wx:if="{{!!item.date}}">
+        <view class="item-setTime" wx:if="{{!!item.date.dateStr}}">
           <text class="setTime-date" selectable="false" space="false" decode="false">
-            {{item.formDate}}
+            {{item.date.formaDate}}
           </text>
           <text class="item-every" selectable="false" space="false" decode="false">
             {{item.repeat.name}}

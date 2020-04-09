@@ -1,10 +1,10 @@
-//index.js
-//获取应用实例
+import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify.js';
+
 const app = getApp()
 
 Page({
   data: {
-    motto: 'Hello World',
+    motto: '',
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
@@ -12,7 +12,7 @@ Page({
   },
 
   // 生命周期start
-  onLoad: function () {
+  onLoad: function() {
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -40,27 +40,34 @@ Page({
       })
     }
 
-		// 调用云函数
-		wx.cloud.callFunction({
-			name: 'login',
-			data: {},
-			success: res => {
-				console.log('[云函数] [login] user openid: ', res.result.openid)
-				app.globalData.openid = res.result.openid
-			},
-			fail: err => {
-				console.error('[云函数] [login] 调用失败', err)
-				wx.navigateTo({
-					url: '../deployFunctions/deployFunctions',
-				})
-			}
-		})
+    // 调用云函数获取openid
+    wx.cloud.callFunction({
+      name: 'login',
+      data: {},
+      success: res => {
+        app.globalData.openid = res.result.openid
+        this.getInMain()
+      },
+      fail: err => {
+        console.error('[云函数] [login] 调用失败', err)
+        wx.navigateTo({
+          url: '../index/index',
+        })
+      }
+    })
 
   },
-  // 生命周期end
-
-  // 事件start
-  getUserInfo: function (e) {
+  getInMain() { // 直接进入remain
+    setTimeout(() => {
+      if (app.globalData.openid && app.globalData.userInfo) {
+        wx.navigateTo({
+          url: '../main/main'
+        })
+			Notify({ type: 'success', message: '进入remind', background: '#FFDAB9', duration: 666 });
+      }
+    },100)
+  },
+  getUserInfo: function(e) {
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo
     this.setData({
@@ -69,23 +76,10 @@ Page({
       info: e
     })
   },
-  // 事件处理函数
-  bindViewTap: function () {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
-    console.log(this.data.info);
-    console.log(app.globalData);
-  },
-  toMain: function () {
+  toMain: function() {
     wx.navigateTo({
       url: '../main/main'
     })
   }
 
-
-
-
-
-  // 事件end
 })

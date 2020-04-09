@@ -8,9 +8,6 @@ const formatTime1 = number => {
   const hour = date.getHours()
   const minute = date.getMinutes()
   const second = date.getSeconds()
-
-
-
   return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute].map(formatNumber).join(':')
 }
 
@@ -26,7 +23,6 @@ const formatNumber = n => {
 function formatTime(number, format) {
 	if (number === '') return ''
 	var format = format || 'Y年M月D日 h:m'
-	// console.log(number, format)
 
 	var formateArr = ['Y', 'M', 'D', 'h', 'm'];
 	var returnArr = [];
@@ -36,8 +32,8 @@ function formatTime(number, format) {
 	returnArr.push((date.getMonth() + 1));
 	returnArr.push((date.getDate()));
 
-	returnArr.push((date.getHours()));
-	returnArr.push((date.getMinutes()));
+	returnArr.push(formatNumber(date.getHours()));
+	returnArr.push(formatNumber(date.getMinutes()));
 	// returnArr.push((date.getSeconds()));
 
 	for (var i in returnArr) {
