@@ -22,7 +22,7 @@ exports.main = async (event, context) => {
 					value: remindList[i].title
 				},
 				time2: { // 日程时间
-					value: remindList[i].formDate
+					value: remindList[i].date.formaDate
 				},
 				thing6: {	// 备注
 					value: remindList[i].remark

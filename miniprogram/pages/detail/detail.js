@@ -144,7 +144,7 @@ Component({
         showDatePick: false,
         dateText,
 				'item.date.dateStr': that.data.currentDate,
-				'item.date.DateObj': formatTime(that.data.currentDate)
+				'item.date.DateObj': new Date(that.data.currentDate)
       })
       this.saveItem()
     },
