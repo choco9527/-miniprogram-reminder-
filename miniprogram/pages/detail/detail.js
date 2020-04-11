@@ -52,7 +52,7 @@ Component({
   },
   observers: {
     'propItem': function(newVal) {
-			let date = !!newVal ? !!newVal.date.dateStr ? newVal.date.dateStr : new Date().getTime() : ''
+      let date = !!newVal ? !!newVal.date.dateStr ? newVal.date.dateStr : new Date().getTime() : ''
       let dateText = !!date ? formatTime(new Date(date)) : ''
       let isOnDate = !!newVal ? !!newVal.date.dateStr : false
       this.setData({
@@ -79,6 +79,7 @@ Component({
       var that = this
       setTimeout(() => {
         var propItem = that.data.item
+        propItem.focus = false
         that.triggerEvent('saveRemind', propItem)
       }, 100)
     },
@@ -87,7 +88,7 @@ Component({
       clearTimeout(that.data.timer) // 防抖
       var timer = setTimeout(() => {
         that.setData({
-					'item.title': e.detail
+          'item.title': e.detail
         })
         that.saveItem()
       }, 500)
@@ -100,7 +101,7 @@ Component({
       clearTimeout(this.data.timer)
       var timer = setTimeout(() => {
         that.setData({
-					'item.remark': e.detail
+          'item.remark': e.detail
         })
         that.saveItem()
       }, 500)
@@ -111,18 +112,19 @@ Component({
     onDateSelec() { // 开启日期选择
       var that = this,
         isOnDate = that.data.isOnDate,
-				date = '', DateObj = null;
+        date = '',
+        DateObj = null;
 
       if (isOnDate) {
         date = ''
       } else {
         date = that.data.currentDate
-				DateObj = new Date(date)
+        DateObj = new Date(date)
       }
       that.setData({
         isOnDate: !isOnDate,
         'item.date.dateStr': date,
-				'item.date.DateObj': DateObj
+        'item.date.DateObj': DateObj
       })
       that.saveItem()
     },
@@ -137,14 +139,14 @@ Component({
       })
     },
     onComfirm() { // 确认时间选择
-		let that = this
+      let that = this
       var dateText = !!this.data.currentDate ? formatTime(new Date(this.data.currentDate)) : '';
 
       this.setData({
         showDatePick: false,
         dateText,
-				'item.date.dateStr': that.data.currentDate,
-				'item.date.DateObj': new Date(that.data.currentDate)
+        'item.date.dateStr': that.data.currentDate,
+        'item.date.DateObj': new Date(that.data.currentDate)
       })
       this.saveItem()
     },

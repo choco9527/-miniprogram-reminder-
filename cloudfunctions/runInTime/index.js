@@ -4,7 +4,6 @@ cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
 })
 const db = cloud.database()
-const TODOS = db.collection('todos')
 const formatNumber = n => {
   n = n.toString()
   return n[1] ? n : '0' + n
@@ -31,23 +30,21 @@ const _formatTime = (number, _Date) => {
   }
   return format;
 }
-const currentDate = _formatTime((Math.round(new Date().getTime() / 1000)) * 1000);
-
-
 exports.main = async(event, context) => {
-
+	let currentDate = _formatTime((Math.round(new Date().getTime() / 1000)) * 1000);
   // 1.筛选数据 
+	let TODOS = db.collection('todos')
   let res = await TODOS.get() // 返回一个数组,包含所有用户数据
-  let allData = res.data // 获取全部信息
-  let taskList = [] // 保存时间匹配的task
-
+  let allData = [...res.data] // 获取全部信息
+	let taskList = [] // 保存时间匹配的task
   for (let i = 0, l = allData.length; i < l; i++) {
     let remindList = allData[i].remindList
     for (let j = 0, rl = remindList.length; j < rl; j++) { // 循环每个用户的list
       let now = currentDate
       let dateStr = _formatTime(remindList[j].date.dateStr)
+			let title = remindList[j].title
       // return { now, dateStr }
-      if (now === dateStr) {
+			if (now === dateStr && !!title) {
         taskList.push({
           openid: allData[i]._openid, // 提醒谁
           taskId: allData[i]._id, // 提醒哪份
@@ -56,20 +53,19 @@ exports.main = async(event, context) => {
       }
     }
   }
-	console.log(taskList)
+	let list = [...taskList]
+	taskList = []
+
   // 2.执行数据提醒
-  for (let k = 0; k < taskList.length; k++) {
- 
+	for (let k = 0; k < list.length; k++) {
     await cloud.callFunction({
       name: 'msgMe',
       data: {
-        openid: taskList[k].openid,
-        taskId: taskList[k].taskId,
-        index: taskList[k].index
+        openid: list[k].openid,
+        taskId: list[k].taskId,
+        index: list[k].index
       }
     })
-  
   }
-
 }
 // wx.cloud.callFunction({name: 'runInTime',data: {} }).then(res => {console.log(res.result)})

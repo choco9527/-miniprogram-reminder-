@@ -27,7 +27,7 @@ exports.main = async (event, context) => {
 					value: remindList[i].date.formaDate
 				},
 				thing6: {	// 备注
-					value: remindList[i].remark
+					value: !!remindList[i].remark ? remindList[i].remark : '无备注'
 				}
 			},
 			templateId: templateId,
