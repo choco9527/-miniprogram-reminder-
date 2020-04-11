@@ -1,6 +1,8 @@
 // 消息提醒云函数
 const cloud = require('wx-server-sdk')
-cloud.init()
+cloud.init({
+	env: cloud.DYNAMIC_CURRENT_ENV
+})
 const templateId = '_Czn6Rny00Y5EBY9nzVFvzhwvu3ManUnwCGSodOHvEw'
 const db = cloud.database()
 const TODOS = db.collection('todos')

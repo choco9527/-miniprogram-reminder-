@@ -18,7 +18,7 @@ bindrefresherrefresh="onRefresh" >
         </view>
       </view>
       <view class="remind-item_mid">
-        <input class="item-input" focus="{{item.focus}}" type="text" value="{{item.title}}" maxlength="15" data-index="{{index}}" catchfocus="inputFocus" bindblur="inputBlur" disabled="{{showPopup}}" bindinput="inputChange" focus="{{item.focus}}"/>
+        <input class="item-input" type="text" value="{{item.title}}" maxlength="15" data-index="{{index}}" catchfocus="inputFocus" bindblur="inputBlur" disabled="{{showPopup}}" bindinput="inputChange"/>
         <view class="item-setTime" wx:if="{{!!item.date.dateStr}}">
           <text class="setTime-date" selectable="false" space="false" decode="false">
             {{item.date.formaDate}}
