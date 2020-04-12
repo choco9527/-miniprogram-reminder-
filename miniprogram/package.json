@@ -5,7 +5,8 @@
   "main": "app.js",
   "dependencies": {
     "@vant/weapp": "^1.2.0",
-    "miniprogram-sm-crypto": "^0.1.0"
+    "miniprogram-sm-crypto": "^0.1.0",
+    "moment": "^2.24.0"
   },
   "devDependencies": {},
   "scripts": {

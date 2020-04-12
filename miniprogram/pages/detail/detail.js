@@ -1,5 +1,5 @@
 const {
-  formatTime
+  _formatTime
 } = require('../../utils/util.js');
 
 Component({
@@ -53,7 +53,7 @@ Component({
   observers: {
     'propItem': function(newVal) {
       let date = !!newVal ? !!newVal.date.dateStr ? newVal.date.dateStr : new Date().getTime() : ''
-      let dateText = !!date ? formatTime(new Date(date)) : ''
+      let dateText = !!date ? _formatTime(new Date(date)) : ''
       let isOnDate = !!newVal ? !!newVal.date.dateStr : false
       this.setData({
         item: newVal,
@@ -66,7 +66,7 @@ Component({
   lifetimes: {
     attached: function() { // 在组件实例进入页面节点树时执行
       var that = this
-      var dateText = !!that.data.currentDate ? formatTime(new Date(that.data.currentDate)) : '';
+      var dateText = !!that.data.currentDate ? _formatTime(new Date(that.data.currentDate)) : '';
 
       that.setData({
         isOnDate: false,
@@ -112,19 +112,18 @@ Component({
     onDateSelec() { // 开启日期选择
       var that = this,
         isOnDate = that.data.isOnDate,
-        date = '',
-        DateObj = null;
-
-      if (isOnDate) {
         date = ''
-      } else {
+      if (isOnDate) { // 开-> 关
+        date = ''
+				that.setData({
+					'item.repeat': { name: "永不", type: 0 }
+				})
+      } else { // 关->开
         date = that.data.currentDate
-        DateObj = new Date(date)
       }
       that.setData({
         isOnDate: !isOnDate,
-        'item.date.dateStr': date,
-        'item.date.DateObj': DateObj
+        'item.date.dateStr': date
       })
       that.saveItem()
     },
@@ -140,13 +139,12 @@ Component({
     },
     onComfirm() { // 确认时间选择
       let that = this
-      var dateText = !!this.data.currentDate ? formatTime(new Date(this.data.currentDate)) : '';
+      var dateText = !!this.data.currentDate ? _formatTime(new Date(this.data.currentDate)) : '';
 
       this.setData({
         showDatePick: false,
         dateText,
-        'item.date.dateStr': that.data.currentDate,
-        'item.date.DateObj': new Date(that.data.currentDate)
+        'item.date.dateStr': that.data.currentDate
       })
       this.saveItem()
     },
@@ -162,7 +160,6 @@ Component({
       })
     },
     selectRepeat(e) { // 选择重复周期
-
       let howToRepeat = e.detail
       console.log(howToRepeat)
       this.setData({

@@ -1,12 +1,19 @@
 /* pages/main/main.wxss */
+
 body {
-  font-family: Helvetica, Arial, "Hiragino Sans GB", "Microsoft Yahei", "微软雅黑", STHeiti, "华文细黑", sans-serif;
+  font-family: Helvetica,
+                 Arial,
+                 "Hiragino Sans GB",
+                 "Microsoft Yahei",
+                 "微软雅黑",
+                 STHeiti,
+                 "华文细黑",
+                 sans-serif;
 }
 
 page {
   background-color: rgb(248, 246, 246);
 }
-
 
 .remind-top {
   display: flex;
@@ -43,8 +50,8 @@ page {
   padding: 10rpx 0;
 }
 
-
 /* item左侧内容 */
+
 .remind-item .remind-item_btn {
   width: 100rpx;
   height: 100rpx;
@@ -84,18 +91,15 @@ page {
   background: rgb(174, 194, 231);
   border-radius: 50%;
   box-shadow: 0 0 2rpx 3rpx rgb(179, 193, 219);
-
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate3d(-50%, -50%, 0);
-
-  transition: all .2s;
+  transition: all 0.2s;
 }
 
-
-
 /* item 中间内容 */
+
 .remind-item .remind-item_mid {
   height: 100%;
   float: left;
@@ -104,11 +108,16 @@ page {
   justify-content: flex-end;
 }
 
-
 .item-input {
   height: 80rpx;
   font-size: 36rpx;
   margin-bottom: -6rpx;
+}
+
+.item-input_past {
+  height: 80rpx;
+  font-size: 36rpx;
+  color: rgb(226, 77, 77);
 }
 
 .item-setTime {
@@ -144,9 +153,11 @@ page {
 .item-every {
   color: #999;
   line-height: 16rpx;
+	font-size: 26rpx
 }
 
 /* item右侧内容 */
+
 .remind-item .remind-right {
   float: right;
   width: 100rpx;
@@ -163,22 +174,22 @@ page {
 }
 
 /* 底部新提醒 */
+
 .remind-bottom {
   height: 120rpx;
   width: 100%;
-  background-color: rgba(255, 245, 245, .9);
+  background-color: rgba(255, 245, 245, 0.9);
   position: fixed;
   bottom: 0;
   display: flex;
   justify-content: start;
   align-items: center;
   z-index: 50;
-	box-shadow: 0 -2px 10px 5px rgba(189, 205, 235, 0.2);
+  box-shadow: 0 -2px 10px 5px rgba(189, 205, 235, 0.2);
 }
 
 .remind-bottom .new-remind {
   color: #678dcf;
   font-weight: 500;
   font-size: 32rpx;
-
 }

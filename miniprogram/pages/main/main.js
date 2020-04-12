@@ -1,13 +1,115 @@
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify.js';
-
+const moment = require('../../utils/moment.js');
+moment.locale('zh-cn', {
+  months: '一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月'.split('_'),
+  monthsShort: '1月_2月_3月_4月_5月_6月_7月_8月_9月_10月_11月_12月'.split('_'),
+  weekdays: '星期日_星期一_星期二_星期三_星期四_星期五_星期六'.split('_'),
+  weekdaysShort: '周日_周一_周二_周三_周四_周五_周六'.split('_'),
+  weekdaysMin: '日_一_二_三_四_五_六'.split('_'),
+  longDateFormat: {
+    LT: 'HH:mm',
+    LTS: 'HH:mm:ss',
+    L: 'YYYY-MM-DD',
+    LL: 'YYYY年MM月DD日',
+    LLL: 'YYYY年MM月DD日Ah点mm分',
+    LLLL: 'YYYY年MM月DD日ddddAh点mm分',
+    l: 'YYYY-M-D',
+    ll: 'YYYY年M月D日',
+    lll: 'YYYY年M月D日 HH:mm',
+    llll: 'YYYY年M月D日dddd HH:mm'
+  },
+  meridiemParse: /凌晨|早上|上午|中午|下午|晚上/,
+  meridiemHour: function(hour, meridiem) {
+    if (hour === 12) {
+      hour = 0;
+    }
+    if (meridiem === '凌晨' || meridiem === '早上' ||
+      meridiem === '上午') {
+      return hour;
+    } else if (meridiem === '下午' || meridiem === '晚上') {
+      return hour + 12;
+    } else {
+      // '中午'
+      return hour >= 11 ? hour : hour + 12;
+    }
+  },
+  meridiem: function(hour, minute, isLower) {
+    const hm = hour * 100 + minute;
+    if (hm < 600) {
+      return '凌晨';
+    } else if (hm < 900) {
+      return '早上';
+    } else if (hm < 1130) {
+      return '上午';
+    } else if (hm < 1230) {
+      return '中午';
+    } else if (hm < 1800) {
+      return '下午';
+    } else {
+      return '晚上';
+    }
+  },
+  calendar: {
+    sameDay: '[今天]LT',
+    nextDay: '[明天]LT',
+    nextWeek: '[下]ddddLT',
+    lastDay: '[昨天]LT',
+    lastWeek: '[上]ddddLT',
+    sameElse: 'L'
+  },
+  dayOfMonthOrdinalParse: /\d{1,2}(日|月|周)/,
+  ordinal: function(number, period) {
+    switch (period) {
+      case 'd':
+      case 'D':
+      case 'DDD':
+        return number + '日';
+      case 'M':
+        return number + '月';
+      case 'w':
+      case 'W':
+        return number + '周';
+      default:
+        return number;
+    }
+  },
+  relativeTime: {
+    future: '%s内',
+    past: '%s前',
+    s: '几秒',
+    ss: '%d秒',
+    m: '1分钟',
+    mm: '%d分钟',
+    h: '1小时',
+    hh: '%d小时',
+    d: '1天',
+    dd: '%d天',
+    M: '1个月',
+    MM: '%d个月',
+    y: '1年',
+    yy: '%d年'
+  },
+  week: {
+    // GB/T 7408-1994《数据元和交换格式·信息交换·日期和时间表示法》与ISO 8601:1988等效
+    dow: 1, // Monday is the first day of the week.
+    doy: 4 // The week that contains Jan 4th is the first week of the year.
+  }
+})
 const {
-  formatTime
+  _formatTime
 } = require('../../utils/util.js');
 const db = wx.cloud.database()
 const TODOS = db.collection('todos')
 const app = getApp()
 const templateId = '_Czn6Rny00Y5EBY9nzVFvzhwvu3ManUnwCGSodOHvEw';
-
+const _hasPast = (number) => { // 判断过期与否
+  let curNum = new Date().getTime()
+  if (!!number) {
+    return (curNum > number)
+  } else {
+    return false
+  }
+}
 Page({
   data: {
     remindList: [],
@@ -17,12 +119,11 @@ Page({
     //   remark: '',
     // 		date: {
     // 		formaDate: 'Y年M月D日 h:m', // 表述时间
-    // 		formaDate1: '昨天', // 语义化的时间
-    // 		DateObj: null, // 时间对象
     // 		dateStr: '' // 时间戳
     // 			},
     //   repeat: {name:'永不',type:0},
-    //   focus: false
+    //   focus: false,
+    // 	 past: false // 是否过期
     // }
     popupItem: null,
     popupIndex: -1,
@@ -33,6 +134,7 @@ Page({
     triggered: false
   },
   onLoad() {
+    // console.log(moment(1586501640000).calendar())
     if (app.globalData.openid) {
       this.setData({
         openid: app.globalData.openid
@@ -58,9 +160,16 @@ Page({
         // console.log(res)
         if (res.data.length > 0) {
           let remindList = [...res.data[0].remindList],
-            counterId = res.data[0]._id
+            counterId = res.data[0]._id;
           remindList.forEach(item => {
-            item.date.formaDate = formatTime(item.date.dateStr)
+            item.date.dateStr = that.updateTime(item)
+            item.date.formaDate = moment(item.date.dateStr).calendar(null, {
+              lastWeek: '[上]ddd hh:mm',
+              nextWeek: '[下]ddd hh:mm',
+              sameElse: 'YYYY年M月D日'
+            })
+            item.past = _hasPast(item.date.dateStr)
+						item.isCompleted = false
           })
 
           that.setData({
@@ -78,7 +187,8 @@ Page({
             })
           })
         }
-      }).catch(rea => {
+      }).catch(err => {
+        console.log(err)
         wx.showToast({
           title: '获取列表失败',
           icon: 'none',
@@ -89,6 +199,8 @@ Page({
       })
   },
   onRefresh() { // 下拉刷新
+    // console.log(moment().calendar())
+
     let that = this
     TODOS.where({
       _openid: that.data.openid
@@ -96,7 +208,17 @@ Page({
       if (res.data.length > 0) {
         let remindList = [...res.data[0].remindList],
           counterId = res.data[0]._id;
-
+        remindList.forEach(item => {
+					item.date.dateStr = that.updateTime(item)
+					item.date.formaDate = moment(item.date.dateStr).calendar(null, {
+						lastWeek: '[上]ddd hh:mm',
+						nextWeek: '[下]ddd hh:mm',
+						sameElse: 'YYYY年M月D日'
+					})
+          item.past = _hasPast(item.date.dateStr)
+					item.isCompleted = false
+        })
+		
         that.setData({
           remindList,
           counterId,
@@ -134,7 +256,7 @@ Page({
           remindList
         }, that.updateCloudList)
       }
-    }, 1000)
+    }, 1500)
     that.setData({
       remindList,
       timer
@@ -155,15 +277,14 @@ Page({
             remark: '',
             date: {
               formaDate: '',
-              formaDate1: '',
-              DateObj: null,
               dateStr: '' // 时间戳
             },
             repeat: {
               name: '永不',
               type: 0
             },
-            focus: true
+            focus: true,
+            past: false
           })
 
           that.setData({
@@ -207,7 +328,6 @@ Page({
   },
   inputChange(e) {
     // console.log('change');
-
     let that = this
     clearTimeout(that.data.timer) // 输入防抖
     let timer = setTimeout(() => {
@@ -252,18 +372,46 @@ Page({
     });
   },
   saveByDetail(e) { // 子组件触发保存
-
-    let that = this
-    let remindList = [...that.data.remindList],
+    let that = this,
+      remindList = [...that.data.remindList],
       i = that.data.popupIndex;
     if (i === -1) return
-    // console.log('触发保存', remindList[i]);
-
-    remindList[i] = e.detail
-    remindList[i].date.formaDate = formatTime(remindList[i].date.dateStr)
+    remindList[i] = e.detail // 替换为子组件传递propitem
+    remindList[i].date.formaDate = moment(remindList[i].date.dateStr).calendar(null, {
+      lastWeek: '[上]ddd hh:mm',
+      nextWeek: '[下]ddd hh:mm',
+      sameElse: 'YYYY年M月D日'
+    })
+    remindList[i].past = _hasPast(remindList[i].date.dateStr)
 
     that.setData({
       remindList
     }, that.updateCloudList)
+  },
+  updateTime(task) { // 更新完成项目的时间
+    if (!!task.isCompleted) { // 已完成
+			let newD =  new Date(task.date.dateStr)
+
+      switch (task.repeat.type) {
+        case 1: // 每小时
+          var hour = new Date(task.date.dateStr).getHours() + 1
+          newD.setHours(hour)
+          break
+        case 2: // 每天
+					var day = new Date(task.date.dateStr).getDate() + 1
+					newD.setDate(day)
+          break
+        case 3: // 每周
+					return task.date.dateStr + 604800000
+          break
+        case 4: // 每月
+          var month = new Date(task.date.dateStr).getMonth() + 1
+          newD.setMonth(month)
+					break
+      }
+			return newD.getTime()
+    } else {
+      return task.date.dateStr
+    }
   }
 })
