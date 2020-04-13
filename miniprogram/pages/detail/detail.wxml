@@ -28,5 +28,12 @@
       </van-transition>
     </van-cell-group>
   </view>
-  <van-action-sheet z-index="{{500}}" show="{{ showRepeatPopup }}" actions="{{ repeatList }}" bind:select="selectRepeat" />
+  <van-action-sheet z-index="{{500}}" cancel-text="Yes Ok" bind:cancel="cancelRepeat" show="{{ showRepeatPopup }}" actions="{{ repeatList }}" bind:select="selectRepeat">
+    <block>
+      <van-transition show="{{ isSelfChoose }}" custom-class="block" name="fade">
+        <van-picker id="picker" show-toolbar title="频率" bind:cancel="onCancelSelf"
+  bind:confirm="onComfirmSelf" columns="{{ selfChoose }}" visible-item-count="{{4}}" bind:change="onSelfChange" />
+      </van-transition>
+    </block>
+  </van-action-sheet>
 </view>

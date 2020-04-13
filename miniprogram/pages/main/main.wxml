@@ -1,5 +1,4 @@
 <van-notify id="van-notify" />
-
   <view class="remind-top">
     <text class="title" wx:if="{{remindList.length > 0}}">Just Remind</text>
     <text class="title" wx:else>Add My Remind</text>

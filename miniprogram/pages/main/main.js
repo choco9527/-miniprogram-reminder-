@@ -119,7 +119,8 @@ Page({
     //   title: '摇号延期',
     //   remark: '',
     // 		date: {
-    // 		formaDate: 'Y年M月D日 h:m', // 表述时间
+    // 		formaDate: '昨天', // 语义时间
+    // 		formaDate1: 'Y年M月D日 h:m', // 表述时间
     // 		dateStr: '' // 时间戳
     // 			},
     //   repeat: {name:'永不',type:0},
@@ -166,7 +167,7 @@ Page({
             item.date.formaDate = moment(item.date.dateStr).calendar(null, {
               lastWeek: '[上]ddd hh:mm',
               nextWeek: '[下]ddd hh:mm',
-              sameElse: 'YYYY年M月D日'
+							sameElse: 'YYYY年M月D日 hh:mm'
             })
             item.date.formaDate1 = _formatTime(item.date.dateStr)
             item.past = _hasPast(item.date.dateStr)
@@ -212,7 +213,7 @@ Page({
           item.date.formaDate = moment(item.date.dateStr).calendar(null, {
             lastWeek: '[上]ddd hh:mm',
             nextWeek: '[下]ddd hh:mm',
-            sameElse: 'YYYY年M月D日'
+						sameElse: 'YYYY年M月D日 hh:mm'
           })
           item.date.formaDate1 = _formatTime(item.date.dateStr)
           item.past = _hasPast(item.date.dateStr)
@@ -346,7 +347,6 @@ Page({
   },
   inputFocus(e) {
     // console.log('focus');
-
     clearTimeout(this.data.timer) // 清除（删除）定时器
     let i = e.currentTarget.dataset.index,
       remindList = [...this.data.remindList],
@@ -376,23 +376,28 @@ Page({
 	updateTime(task) { // 更新完成项目的时间
 		if (!!task.isCompleted) { // 已完成
 			let newD = new Date(task.date.dateStr)
-
+			let x = task.repeat.name[1] // 每x小时/天
+			
 			switch (task.repeat.type) {
 				case 1: // 每小时
-					var hour = new Date(task.date.dateStr).getHours() + 1
+					let hour = new Date(task.date.dateStr).getHours() + 1
 					newD.setHours(hour)
-					break
+					break;
 				case 2: // 每天
-					var day = new Date(task.date.dateStr).getDate() + 1
+					let day = new Date(task.date.dateStr).getDate() + 1
 					newD.setDate(day)
-					break
+					break;
 				case 3: // 每周
 					return task.date.dateStr + 604800000
-					break
+					break;
 				case 4: // 每月
-					var month = new Date(task.date.dateStr).getMonth() + 1
+					let month = new Date(task.date.dateStr).getMonth() + 1
 					newD.setMonth(month)
-					break
+					break;
+				case 5: // 每x小时
+					return task.date.dateStr +3600000 * x;
+				case 6: // 每x天
+					return task.date.dateStr + 86400000 * x
 			}
 			return newD.getTime()
 		} else {
@@ -408,7 +413,7 @@ Page({
     remindList[i].date.formaDate = moment(remindList[i].date.dateStr).calendar(null, {
       lastWeek: '[上]ddd hh:mm',
       nextWeek: '[下]ddd hh:mm',
-      sameElse: 'YYYY年M月D日'
+			sameElse: 'YYYY年M月D日 hh:mm'
     })
     remindList[i].date.formaDate1 = _formatTime(remindList[i].date.dateStr)
     remindList[i].past = _hasPast(remindList[i].date.dateStr)

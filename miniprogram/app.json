@@ -20,7 +20,8 @@
 		"van-datetime-picker": "@vant/weapp/datetime-picker/index",
 		"van-action-sheet": "@vant/weapp/action-sheet/index",
 		"van-notify": "@vant/weapp/notify/index",
-		"van-icon": "@vant/weapp/icon/index"
+		"van-icon": "@vant/weapp/icon/index",
+		"van-picker": "@vant/weapp/picker/index"
 	},
 	"permission": {
 		"scope.userLocation": {

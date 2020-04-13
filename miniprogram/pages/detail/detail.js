@@ -1,7 +1,17 @@
 const {
   _formatTime
 } = require('../../utils/util.js');
-
+const hourArr = [],dayArr = [],weekArr=[]
+for (let i = 1; i <= 24; i++) {
+	hourArr.push('每'+i+'小时')
+	dayArr.push('每'+i+'天')
+	weekArr.push('每'+i+'周')
+}
+const frequencys = {
+  '小时': hourArr,
+  '天': dayArr,
+	'周': weekArr
+};
 Component({
   options: {
     styleIsolation: 'isolated'
@@ -48,7 +58,20 @@ Component({
     }, {
       name: '每月',
       type: 4
+    }, {
+      name: '自定',
+      type: -1
     }],
+    isSelfChoose: false,
+    selfChoose: [{
+				values: Object.keys(frequencys),
+        className: 'column1'
+      },
+      {
+				values: frequencys['小时'],
+        className: 'column2'
+      }
+    ],
     isOnLocation: false
   },
   observers: {
@@ -171,13 +194,58 @@ Component({
       })
     },
     selectRepeat(e) { // 选择重复周期
-      let howToRepeat = e.detail
+      let howToRepeat = e.detail,
+        that = this
       console.log(howToRepeat)
-      this.setData({
+      if (howToRepeat.type === -1) { // 选择自定
+        that.setData({
+          isSelfChoose: !that.data.isSelfChoose
+        });
+        return
+      }
+      that.setData({
         showRepeatPopup: false,
         'item.repeat': howToRepeat
       });
-      this.saveItem()
+      that.saveItem()
+    },
+		onCancelSelf() {
+			this.setData({
+				isSelfChoose: !this.data.isSelfChoose
+			});
+		},
+		onComfirmSelf() { // 确定自定义时间
+		let that =this
+			let picker = that.selectComponent('#picker'),
+			 vals = picker.getValues(),
+			 type = vals[0],
+			 name = vals[1], // "每3天"
+			 howToRepeat =null
+			if (type==='小时') {
+				 howToRepeat = { name, type: 5 }
+			}else if(type==='天') {
+				howToRepeat = { name, type: 6 }
+			}else if(type==='周') {
+				howToRepeat = { name, type: 7 }
+			}
+			console.log(howToRepeat)
+			that.setData({
+				'item.repeat': howToRepeat,
+				isSelfChoose: !that.data.isSelfChoose
+			});
+			that.saveItem()
+		},
+    onSelfChange(event) { // 自定义选择时间
+      const {
+        picker,
+        value
+      } = event.detail;
+			picker.setColumnValues(1, frequencys[value[0]]); // 设置2级的联动
+    },
+    cancelRepeat() {
+      this.setData({
+        showRepeatPopup: false
+      });
     },
     onLocationselec() { // 地址选择开关
       let that = this,
