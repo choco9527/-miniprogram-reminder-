@@ -10,11 +10,9 @@ body {
                  "华文细黑",
                  sans-serif;
 }
-
-page {
-  background-color: rgb(248, 246, 246);
+page{
+	background-color: #F8F6F6
 }
-
 .remind-top {
   display: flex;
   justify-content: center;
@@ -23,7 +21,7 @@ page {
 .remind-top .title {
   font-size: 42rpx;
   font-weight: 600;
-  color: rgb(44, 96, 143);
+  color: rgb(129, 176, 218);
 }
 
 .remind-list {
@@ -95,7 +93,6 @@ page {
   left: 50%;
   top: 50%;
   transform: translate3d(-50%, -50%, 0);
-  transition: all 0.2s;
 }
 
 /* item 中间内容 */
@@ -149,12 +146,19 @@ page {
   line-height: 20rpx;
   margin: 25rpx 0 -15rpx 0;
 }
+.item-address {
+ 	font-size: 20rpx;
+  color: rgb(102, 119, 156);
+  line-height: 20rpx;
+  margin: 20rpx 0 -15rpx 0;
+}
 
 .item-every {
   color: #999;
   line-height: 16rpx;
 	font-size: 26rpx
 }
+
 
 /* item右侧内容 */
 

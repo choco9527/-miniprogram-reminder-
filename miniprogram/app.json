@@ -8,7 +8,7 @@
 		"backgroundTextStyle": "light",
 		"navigationBarBackgroundColor": "#F8F6F6",
 		"navigationBarTitleText": "",
-		"navigationBarTextStyle": "black"
+		"navigationBarTextStyle": "white"
 	},
 	"usingComponents": {
 		"van-popup": "@vant/weapp/popup/index",
@@ -19,7 +19,13 @@
 		"van-transition": "@vant/weapp/transition/index",
 		"van-datetime-picker": "@vant/weapp/datetime-picker/index",
 		"van-action-sheet": "@vant/weapp/action-sheet/index",
-		"van-notify": "@vant/weapp/notify/index"
+		"van-notify": "@vant/weapp/notify/index",
+		"van-icon": "@vant/weapp/icon/index"
+	},
+	"permission": {
+		"scope.userLocation": {
+			"desc": "获取位置信息添加至任务中"
+		}
 	},
 	"sitemapLocation": "sitemap.json"
 }

@@ -14,7 +14,6 @@ exports.main = async (event, context) => {
 		let res = await TODOS.doc(event.taskId).get() // 获取当前用户全部list
 		let i = event.index
 		let remindList = res.data.remindList
-
 		const result = await cloud.openapi.subscribeMessage.send({
 			touser: event.openid,
 			page: 'pages/main/main',
@@ -24,7 +23,7 @@ exports.main = async (event, context) => {
 					value: remindList[i].title
 				},
 				time2: { // 日程时间
-					value: remindList[i].date.formaDate
+					value: remindList[i].date.formaDate1
 				},
 				thing6: {	// 备注
 					value: !!remindList[i].remark ? remindList[i].remark : '无备注'
@@ -39,4 +38,4 @@ exports.main = async (event, context) => {
 	}
 }
 // test代码
-// wx.cloud.callFunction({	name: 'msgMe',	data: {	openid: 'oiLOL5THpcMk1GydSJlz5pejV9nw',taskId: '2b4144565e8c7870004740ee09e932cb',	index: 0}}).then(res => {console.log(res.result)})
+// wx.cloud.callFunction({	name: 'msgMe',	data: {	openid: 'oiLOL5THpcMk1GydSJlz5pejV9nw',taskId: '42c9a7b15e9148ea00772f2976b9493c',	index: 0}}).then(res => {console.log(res.result)})

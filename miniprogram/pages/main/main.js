@@ -98,7 +98,8 @@ moment.locale('zh-cn', {
 const {
   _formatTime
 } = require('../../utils/util.js');
-const db = wx.cloud.database()
+
+const db = wx.cloud.database() // 获取数据库
 const TODOS = db.collection('todos')
 const app = getApp()
 const templateId = '_Czn6Rny00Y5EBY9nzVFvzhwvu3ManUnwCGSodOHvEw';
@@ -131,10 +132,9 @@ Page({
     timer: null,
     openid: '',
     counterId: '',
-    triggered: false
+    triggered: false,
   },
   onLoad() {
-    // console.log(moment(1586501640000).calendar())
     if (app.globalData.openid) {
       this.setData({
         openid: app.globalData.openid
@@ -168,8 +168,9 @@ Page({
               nextWeek: '[下]ddd hh:mm',
               sameElse: 'YYYY年M月D日'
             })
+            item.date.formaDate1 = _formatTime(item.date.dateStr)
             item.past = _hasPast(item.date.dateStr)
-						item.isCompleted = false
+            item.isCompleted = false
           })
 
           that.setData({
@@ -199,8 +200,6 @@ Page({
       })
   },
   onRefresh() { // 下拉刷新
-    // console.log(moment().calendar())
-
     let that = this
     TODOS.where({
       _openid: that.data.openid
@@ -209,16 +208,17 @@ Page({
         let remindList = [...res.data[0].remindList],
           counterId = res.data[0]._id;
         remindList.forEach(item => {
-					item.date.dateStr = that.updateTime(item)
-					item.date.formaDate = moment(item.date.dateStr).calendar(null, {
-						lastWeek: '[上]ddd hh:mm',
-						nextWeek: '[下]ddd hh:mm',
-						sameElse: 'YYYY年M月D日'
-					})
+          item.date.dateStr = that.updateTime(item)
+          item.date.formaDate = moment(item.date.dateStr).calendar(null, {
+            lastWeek: '[上]ddd hh:mm',
+            nextWeek: '[下]ddd hh:mm',
+            sameElse: 'YYYY年M月D日'
+          })
+          item.date.formaDate1 = _formatTime(item.date.dateStr)
           item.past = _hasPast(item.date.dateStr)
-					item.isCompleted = false
+          item.isCompleted = false
         })
-		
+
         that.setData({
           remindList,
           counterId,
@@ -277,12 +277,14 @@ Page({
             remark: '',
             date: {
               formaDate: '',
+              formaDate1: '',
               dateStr: '' // 时间戳
             },
             repeat: {
               name: '永不',
               type: 0
             },
+            locationObj: {name:''},
             focus: true,
             past: false
           })
@@ -371,6 +373,32 @@ Page({
       popupIndex: -1
     });
   },
+	updateTime(task) { // 更新完成项目的时间
+		if (!!task.isCompleted) { // 已完成
+			let newD = new Date(task.date.dateStr)
+
+			switch (task.repeat.type) {
+				case 1: // 每小时
+					var hour = new Date(task.date.dateStr).getHours() + 1
+					newD.setHours(hour)
+					break
+				case 2: // 每天
+					var day = new Date(task.date.dateStr).getDate() + 1
+					newD.setDate(day)
+					break
+				case 3: // 每周
+					return task.date.dateStr + 604800000
+					break
+				case 4: // 每月
+					var month = new Date(task.date.dateStr).getMonth() + 1
+					newD.setMonth(month)
+					break
+			}
+			return newD.getTime()
+		} else {
+			return task.date.dateStr
+		}
+	},
   saveByDetail(e) { // 子组件触发保存
     let that = this,
       remindList = [...that.data.remindList],
@@ -382,36 +410,12 @@ Page({
       nextWeek: '[下]ddd hh:mm',
       sameElse: 'YYYY年M月D日'
     })
+    remindList[i].date.formaDate1 = _formatTime(remindList[i].date.dateStr)
     remindList[i].past = _hasPast(remindList[i].date.dateStr)
 
     that.setData({
       remindList
     }, that.updateCloudList)
-  },
-  updateTime(task) { // 更新完成项目的时间
-    if (!!task.isCompleted) { // 已完成
-			let newD =  new Date(task.date.dateStr)
-
-      switch (task.repeat.type) {
-        case 1: // 每小时
-          var hour = new Date(task.date.dateStr).getHours() + 1
-          newD.setHours(hour)
-          break
-        case 2: // 每天
-					var day = new Date(task.date.dateStr).getDate() + 1
-					newD.setDate(day)
-          break
-        case 3: // 每周
-					return task.date.dateStr + 604800000
-          break
-        case 4: // 每月
-          var month = new Date(task.date.dateStr).getMonth() + 1
-          newD.setMonth(month)
-					break
-      }
-			return newD.getTime()
-    } else {
-      return task.date.dateStr
-    }
   }
+
 })

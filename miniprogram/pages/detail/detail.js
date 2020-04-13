@@ -48,18 +48,26 @@ Component({
     }, {
       name: '每月',
       type: 4
-    }]
+    }],
+    isOnLocation: false
   },
   observers: {
     'propItem': function(newVal) {
       let date = !!newVal ? !!newVal.date.dateStr ? newVal.date.dateStr : new Date().getTime() : ''
       let dateText = !!date ? _formatTime(new Date(date)) : ''
       let isOnDate = !!newVal ? !!newVal.date.dateStr : false
+      if (!!newVal && !newVal.locationObj) {
+        newVal.locationObj = {
+          name: ''
+        }
+      }
+      let isOnLocation = !!newVal ? !!newVal.locationObj.name : false
       this.setData({
         item: newVal,
         currentDate: date,
         dateText,
-        isOnDate
+        isOnDate,
+        isOnLocation
       })
     },
   },
@@ -115,9 +123,12 @@ Component({
         date = ''
       if (isOnDate) { // 开-> 关
         date = ''
-				that.setData({
-					'item.repeat': { name: "永不", type: 0 }
-				})
+        that.setData({
+          'item.repeat': {
+            name: "永不",
+            type: 0
+          }
+        })
       } else { // 关->开
         date = that.data.currentDate
       }
@@ -167,6 +178,42 @@ Component({
         'item.repeat': howToRepeat
       });
       this.saveItem()
+    },
+    onLocationselec() { // 地址选择开关
+      let that = this,
+        isOnLocation = that.data.isOnLocation,
+        locationObj = null
+      if (isOnLocation) { // 开-> 关
+        locationObj = {
+          name: ''
+        };
+      } else { // 关->开
+        locationObj = {
+          name: that.data.item.locationObj.name
+        };
+      }
+      that.setData({
+        isOnLocation: !isOnLocation,
+        'item.locationObj': locationObj
+      })
+      that.saveItem()
+    },
+    chooseLocation() { // 选择位置
+      let that = this
+      wx.chooseLocation({
+        success: (res) => {
+          let locationObj = {
+            latitude: res.latitude,
+            longitude: res.longitude,
+            name: res.name,
+            address: res.address
+          }
+          that.setData({
+            'item.locationObj': locationObj
+          })
+          that.saveItem()
+        },
+      })
     }
   }
 

@@ -16,10 +16,7 @@ const _formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 /** 
- * 时间戳转化为年 月 日 时 分 秒 
- * number: 传入时间戳 
  * format：返回格式，支持自定义，但参数必须与formateArr里保持一致 
- * 判断两个时间戳，转化为语义化名字，如'今天'、'明天'
  */
 const _formatTime = (number) => {
   if (number === '') return ''
