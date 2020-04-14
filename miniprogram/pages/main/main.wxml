@@ -1,4 +1,5 @@
-<van-notify id="van-notify" />
+<view class="main">
+  <van-notify id="van-notify" />
   <view class="remind-top">
     <text class="title" wx:if="{{remindList.length > 0}}">Just Remind</text>
     <text class="title" wx:else>Add My Remind</text>
@@ -25,9 +26,9 @@
           <text wx:if="{{item.remark}}" class="item-remark">{{item.remark}}</text>
           <text wx:if="{{!!item.locationObj.name}}" class="item-address">{{item.locationObj.name}}</text>
         </view>
-        <view wx:if="{{item.focus}}" class="remind-right">
-          <image style="width:64rpx;height:64rpx" class="right-info" src="../../images/info.png" mode="aspectFit" data-item="{{item}}" data-index="{{index}}" catchtap="showDetail" />
-        </view>
+        <van-transition show="{{item.focus}}" class="remind-right" name="fade">
+          <image style="width:80rpx;height:80rpx" class="right-info" src="../../images/info.png" mode="aspectFit" data-item="{{item}}" data-index="{{index}}" catchtap="showDetail" />
+        </van-transition>
       </view>
     </view>
   </scroll-view>
@@ -38,6 +39,7 @@
     <text class="new-remind">新提醒事项</text>
   </view>
   <!-- 新建事项end -->
+</view>
 
 
 <!-- 详情弹出层start -->

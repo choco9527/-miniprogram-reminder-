@@ -10,12 +10,17 @@ body {
                  "华文细黑",
                  sans-serif;
 }
+.main {
+	height: 100vh;
+	width: 100vw
+}
 page{
 	background-color: #F8F6F6
 }
 .remind-top {
   display: flex;
   justify-content: center;
+	padding: 5vh 0 2vh 0;
 }
 
 .remind-top .title {
@@ -59,8 +64,8 @@ page{
 }
 
 .remind-item .remind-item_btn .btn-wrapper {
-  width: 42rpx;
-  height: 42rpx;
+  width: 56rpx;
+  height: 56rpx;
   padding: 10rpx;
   position: absolute;
   left: 50%;
@@ -73,8 +78,8 @@ page{
 
 .remind-item_btn .inner-btn {
   display: block;
-  width: 28rpx;
-  height: 28rpx;
+  width: 46rpx;
+  height: 46rpx;
   border-radius: 50%;
   position: absolute;
   left: 50%;
@@ -84,8 +89,8 @@ page{
 
 .remind-item_btn .inner-btnCom {
   display: block;
-  width: 28rpx;
-  height: 28rpx;
+  width: 46rpx;
+  height: 46rpx;
   background: rgb(174, 194, 231);
   border-radius: 50%;
   box-shadow: 0 0 2rpx 3rpx rgb(179, 193, 219);

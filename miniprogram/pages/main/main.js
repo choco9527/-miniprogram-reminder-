@@ -165,9 +165,9 @@ Page({
           remindList.forEach(item => {
             item.date.dateStr = that.updateTime(item)
             item.date.formaDate = moment(item.date.dateStr).calendar(null, {
-              lastWeek: '[上]ddd hh:mm',
-              nextWeek: '[下]ddd hh:mm',
-							sameElse: 'YYYY年M月D日 hh:mm'
+              lastWeek: '[上]ddd kk:mm',
+              nextWeek: '[下]ddd kk:mm',
+              sameElse: 'YYYY年M月D日 kk:mm'
             })
             item.date.formaDate1 = _formatTime(item.date.dateStr)
             item.past = _hasPast(item.date.dateStr)
@@ -211,9 +211,9 @@ Page({
         remindList.forEach(item => {
           item.date.dateStr = that.updateTime(item)
           item.date.formaDate = moment(item.date.dateStr).calendar(null, {
-            lastWeek: '[上]ddd hh:mm',
-            nextWeek: '[下]ddd hh:mm',
-						sameElse: 'YYYY年M月D日 hh:mm'
+            lastWeek: '[上]ddd kk:mm',
+            nextWeek: '[下]ddd kk:mm',
+            sameElse: 'YYYY年M月D日 kk:mm'
           })
           item.date.formaDate1 = _formatTime(item.date.dateStr)
           item.past = _hasPast(item.date.dateStr)
@@ -285,7 +285,9 @@ Page({
               name: '永不',
               type: 0
             },
-            locationObj: {name:''},
+            locationObj: {
+              name: ''
+            },
             focus: true,
             past: false
           })
@@ -373,37 +375,42 @@ Page({
       popupIndex: -1
     });
   },
-	updateTime(task) { // 更新完成项目的时间
-		if (!!task.isCompleted) { // 已完成
-			let newD = new Date(task.date.dateStr)
-			let x = task.repeat.name[1] // 每x小时/天
-			
-			switch (task.repeat.type) {
-				case 1: // 每小时
-					let hour = new Date(task.date.dateStr).getHours() + 1
-					newD.setHours(hour)
-					break;
-				case 2: // 每天
-					let day = new Date(task.date.dateStr).getDate() + 1
-					newD.setDate(day)
-					break;
-				case 3: // 每周
-					return task.date.dateStr + 604800000
-					break;
-				case 4: // 每月
-					let month = new Date(task.date.dateStr).getMonth() + 1
-					newD.setMonth(month)
-					break;
-				case 5: // 每x小时
-					return task.date.dateStr +3600000 * x;
-				case 6: // 每x天
-					return task.date.dateStr + 86400000 * x
-			}
-			return newD.getTime()
-		} else {
-			return task.date.dateStr
-		}
-	},
+  updateTime(task) { // 更新完成项目的时间
+    if (!!task.isCompleted) { // 已完成
+      let newD = new Date(task.date.dateStr)
+      let x = task.repeat.name[1] // 每x小时/天
+			if (+task.repeat.name[2] === +task.repeat.name[2]) {
+        x = x + task.repeat.name[2] // '1'+'0' = '10'
+      }
+			console.log(x)
+      switch (task.repeat.type) {
+        case 1: // 每小时
+          let hour = new Date(task.date.dateStr).getHours() + 1
+          newD.setHours(hour)
+          break;
+        case 2: // 每天
+          let day = new Date(task.date.dateStr).getDate() + 1
+          newD.setDate(day)
+          break;
+        case 3: // 每周
+          return task.date.dateStr + 604800000
+          break;
+        case 4: // 每月
+          let month = new Date(task.date.dateStr).getMonth() + 1
+          newD.setMonth(month)
+          break;
+        case 5: // 每x小时
+          return task.date.dateStr + 3600000 * x;
+        case 6: // 每x天
+          return task.date.dateStr + 86400000 * x;
+        case 7: // 每x周
+          return task.date.dateStr + 604800000 * x;
+      }
+      return newD.getTime()
+    } else {
+      return task.date.dateStr
+    }
+  },
   saveByDetail(e) { // 子组件触发保存
     let that = this,
       remindList = [...that.data.remindList],
@@ -411,9 +418,9 @@ Page({
     if (i === -1) return
     remindList[i] = e.detail // 替换为子组件传递propitem
     remindList[i].date.formaDate = moment(remindList[i].date.dateStr).calendar(null, {
-      lastWeek: '[上]ddd hh:mm',
-      nextWeek: '[下]ddd hh:mm',
-			sameElse: 'YYYY年M月D日 hh:mm'
+      lastWeek: '[上]ddd kk:mm',
+      nextWeek: '[下]ddd kk:mm',
+      sameElse: 'YYYY年M月D日 kk:mm'
     })
     remindList[i].date.formaDate1 = _formatTime(remindList[i].date.dateStr)
     remindList[i].past = _hasPast(remindList[i].date.dateStr)

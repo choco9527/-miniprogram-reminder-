@@ -8,7 +8,8 @@
 		"backgroundTextStyle": "light",
 		"navigationBarBackgroundColor": "#F8F6F6",
 		"navigationBarTitleText": "",
-		"navigationBarTextStyle": "white"
+		"navigationBarTextStyle": "white",
+		"navigationStyle": "custom"
 	},
 	"usingComponents": {
 		"van-popup": "@vant/weapp/popup/index",
