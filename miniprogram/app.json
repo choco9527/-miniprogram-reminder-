@@ -2,14 +2,14 @@
 	"pages": [
 		"pages/index/index",
 		"pages/main/main",
-		"pages/detail/detail"
+		"pages/detail/detail",
+		"pages/wait/wait"
 	],
 	"window": {
 		"backgroundTextStyle": "light",
 		"navigationBarBackgroundColor": "#F8F6F6",
 		"navigationBarTitleText": "",
-		"navigationBarTextStyle": "white",
-		"navigationStyle": "custom"
+		"navigationBarTextStyle": "white"
 	},
 	"usingComponents": {
 		"van-nav-bar": "@vant/weapp/nav-bar/index",
@@ -25,7 +25,10 @@
 		"van-icon": "@vant/weapp/icon/index",
 		"van-picker": "@vant/weapp/picker/index",
 		"van-swipe-cell": "@vant/weapp/swipe-cell/index",
-		"van-image": "@vant/weapp/image/index"
+		"van-button": "@vant/weapp/button/index",
+		"van-count-down": "@vant/weapp/count-down/index",
+		"van-grid": "@vant/weapp/grid/index",
+		"van-grid-item": "@vant/weapp/grid-item/index"
 	},
 	"permission": {
 		"scope.userLocation": {

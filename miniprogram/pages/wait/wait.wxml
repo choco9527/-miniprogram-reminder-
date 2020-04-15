@@ -1,0 +1,43 @@
+<van-notify id="van-notify" />
+
+  <van-cell size="large" icon="label-o" title="{{task.title}}" value="{{task.date.formaDate}}" label="{{task.remark}}" border="{{ false }}" />
+
+<van-count-down 
+class="control-count-down" 
+use-slot 
+time="{{ time }}" 
+bind:finish="finished"
+bind:change="onChange">
+
+<van-grid square clickable column-num="3">
+	<van-grid-item  use-slot>
+		<text class="item">{{ timeData.hours }}</text>
+	</van-grid-item>
+	<van-grid-item  use-slot>
+		<text class="item">{{ timeData.minutes }}</text>
+	</van-grid-item>
+	<van-grid-item  use-slot>
+		<text class="item">{{ timeData.seconds }}</text>
+	</van-grid-item>
+</van-grid>
+
+</van-count-down>
+
+<van-grid clickable column-num="3">
+  <van-grid-item text="继续" icon="play-circle-o" bindclick="start" />
+  <van-grid-item text="暂停" icon="pause-circle-o" bindclick="pause" />
+  <van-grid-item text="重置" icon="replay" bindclick="reset" />
+</van-grid>
+
+<van-transition show="{{ showTimePicker }}" custom-class="block" name="fade-up">
+	<van-datetime-picker
+		type="time"
+		value="{{ currentDate }}"
+		filter="{{ filter }}"
+		bind:confirm="onComfirm"
+		bind:cancel="onCancel"
+	/>
+</van-transition>
+
+
+<van-button class="bot-btn" bindtap="remindLater" plain color="#D2B48C" round size="large" type="info">稍后提醒我</van-button>

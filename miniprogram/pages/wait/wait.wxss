@@ -1,0 +1,14 @@
+.bot-btn{
+	position: fixed;
+	bottom: 10px;
+	width:30%;
+	left: 50%;
+	transform: translateX(-50%)
+}
+.item {
+  color: rgb(138, 69, 69);
+  font-size: 50px;
+}
+.timeText{
+	color: rgb(21, 206, 67)
+}

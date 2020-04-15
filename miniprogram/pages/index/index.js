@@ -63,7 +63,6 @@ Page({
 		},600)
   },
   getInMain() { // 直接进入remain
-	return
     setTimeout(() => {
       if (app.globalData.openid && app.globalData.userInfo) {
         wx.navigateTo({
@@ -71,7 +70,7 @@ Page({
         })
 			Notify({ type: 'success', message: '进入remind', background: '#FFDAB9', duration: 666 });
       }
-    },100)
+    },700)
   },
   getUserInfo: function(e) {
     console.log(e)

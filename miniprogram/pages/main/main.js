@@ -262,7 +262,7 @@ Page({
       timer
     }, that.updateCloudList)
   },
-	delItem(event) { // 左滑删除
+	delItem(event) { // 右滑删除
 		let i = event.currentTarget.dataset.index,
 			that = this,
 			remindList = [...that.data.remindList];
@@ -276,7 +276,13 @@ Page({
 		that.setData({
 			remindList
 		}, that.updateCloudList)
-		
+	},
+	navToWait(event) { // 左滑跳转
+		let i = event.currentTarget.dataset.index
+		let url = '../wait/wait?index=' + i
+		wx.navigateTo({
+			url
+		})
 	},
   newRemind(e) { // 新待办，设置订阅
     let that = this,
@@ -426,6 +432,7 @@ Page({
       return task.date.dateStr
     }
   },
+
   saveByDetail(e) { // 子组件触发保存
     let that = this,
       remindList = [...that.data.remindList],

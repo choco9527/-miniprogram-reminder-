@@ -8,7 +8,13 @@
 
   <scroll-view scroll-y="{{true}}" style="width: 100%; height: 1040rpx;" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh">
     <view class="remind-list">
-      <van-swipe-cell right-width="{{ 65 }}" wx:for="{{remindList}}" wx:key="index">
+      <van-swipe-cell right-width="{{ 65 }}" left-width="{{ 65 }}" wx:for="{{remindList}}" wx:key="index">
+			  <view slot="left" data-index="{{index}}" bind:tap="delItem" class="slide left">
+					<image
+						class="slideImg"
+						src="../../images/del.svg"
+						/>
+				</view>
         <view class="remind-item">
           <view class="remind-item_btn" data-index="{{index}}" catchtap="onChangeCom">
             <view class="btn-wrapper">
@@ -33,16 +39,13 @@
             <image style="width:48rpx;height:48rpx" class="right-info" src="../../images/info.svg" mode="aspectFit" data-item="{{item}}" data-index="{{index}}" catchtap="showDetail" />
           </van-transition>
         </view>
-        <view slot="right" data-index="{{index}}" bind:tap="delItem" class="delRight">
-					<van-image
-						class="del"
-						width="30"
-						height="30"
-						src="../../../../images/del.png"
+        <view slot="right" data-index="{{index}}"  bind:tap="navToWait" class="slide right">
+					<image
+						class="slideImg"
+						src="../../images/wait.svg"
 						/>
 				</view>
       </van-swipe-cell>
-
 
     </view>
   </scroll-view>

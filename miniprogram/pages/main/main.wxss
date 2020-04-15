@@ -10,17 +10,20 @@ body {
                  "华文细黑",
                  sans-serif;
 }
+
 .main {
-	height: 100vh;
-	width: 100vw
+  height: 100vh;
+  width: 100vw;
 }
-page{
-	background-color: #F8F6F6
+
+page {
+  background-color: #f8f6f6;
 }
+
 .remind-top {
   display: flex;
   justify-content: center;
-	padding: 5vh 0 2vh 0;
+  padding: 5vh 0 2vh 0;
 }
 
 .remind-top .title {
@@ -52,21 +55,30 @@ page{
   border-bottom: 1px solid rgb(183, 200, 201);
   padding: 5px 0;
 }
-.remind-list .delRight {
-	position: relative;
-	background-color:#F4A460; 
-	width: 65px;
-	height: 100px
+
+.remind-list .slide {
+  position: relative;
+  width: 65px;
+  height: 100px;
+	margin: 0 1px
+}
+.remind-list .slide.left {
+  background-color: #ce5050;
+}
+.remind-list .slide.right {
+  background-color: #f5c194;
 }
 
-.remind-list .delRight .del{
-	position: absolute;
-	top: 20%;
-	left: 50%;
-	transform: translate3d(-50%,0,0);
-	font-size: 15px;
-	color: #fff;
-	font-weight:500
+.remind-list .slide .slideImg {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
+  color: #fff;
+  font-weight: 500;
 }
 
 /* item左侧内容 */
@@ -165,8 +177,9 @@ page{
   line-height: 10px;
   margin: 12.5px 0 -7.5px 0;
 }
+
 .item-address {
- 	font-size: 10px;
+  font-size: 10px;
   color: rgb(102, 119, 156);
   line-height: 10px;
   margin: 10px 0 -7.5px 0;
@@ -175,9 +188,8 @@ page{
 .item-every {
   color: #999;
   line-height: 8px;
-	font-size: 13px
+  font-size: 13px;
 }
-
 
 /* item右侧内容 */
 

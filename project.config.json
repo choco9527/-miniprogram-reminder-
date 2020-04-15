@@ -66,6 +66,13 @@
 					"pathName": "pages/main/main",
 					"query": "",
 					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "pages/wait/wait",
+					"pathName": "pages/wait/wait",
+					"query": "index=2",
+					"scene": null
 				}
 			]
 		}
