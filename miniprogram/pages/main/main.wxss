@@ -24,7 +24,7 @@ page{
 }
 
 .remind-top .title {
-  font-size: 42rpx;
+  font-size: 24px;
   font-weight: 600;
   color: rgb(129, 176, 218);
 }
@@ -32,13 +32,13 @@ page{
 .remind-list {
   display: flex;
   flex-direction: column;
-  margin-top: 20rpx;
-  padding: 0 10rpx;
+  margin-top: 10px;
+  padding: 0 5px;
 }
 
 .remind-list .remind-item {
   height: 100%;
-  margin-bottom: 10rpx;
+  margin-bottom: 5px;
 }
 
 .remind-list .remind-item:after {
@@ -50,36 +50,52 @@ page{
   width: 90%;
   margin: 0 auto;
   border-bottom: 1px solid rgb(183, 200, 201);
-  padding: 10rpx 0;
+  padding: 5px 0;
+}
+.remind-list .delRight {
+	position: relative;
+	background-color:#F4A460; 
+	width: 65px;
+	height: 100px
+}
+
+.remind-list .delRight .del{
+	position: absolute;
+	top: 20%;
+	left: 50%;
+	transform: translate3d(-50%,0,0);
+	font-size: 15px;
+	color: #fff;
+	font-weight:500
 }
 
 /* item左侧内容 */
 
 .remind-item .remind-item_btn {
-  width: 100rpx;
-  height: 100rpx;
+  width: 50px;
+  height: 50px;
   float: left;
   text-align: center;
   position: relative;
 }
 
 .remind-item .remind-item_btn .btn-wrapper {
-  width: 56rpx;
-  height: 56rpx;
-  padding: 10rpx;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
   position: absolute;
   left: 50%;
   top: 50%;
   box-sizing: border-box;
   transform: translate3d(-50%, -50%, 0);
-  border: lightcoral solid 3rpx;
+  border: lightcoral solid 1.5px;
   border-radius: 50%;
 }
 
 .remind-item_btn .inner-btn {
   display: block;
-  width: 46rpx;
-  height: 46rpx;
+  width: 23px;
+  height: 23px;
   border-radius: 50%;
   position: absolute;
   left: 50%;
@@ -89,11 +105,11 @@ page{
 
 .remind-item_btn .inner-btnCom {
   display: block;
-  width: 46rpx;
-  height: 46rpx;
+  width: 23px;
+  height: 23px;
   background: rgb(174, 194, 231);
   border-radius: 50%;
-  box-shadow: 0 0 2rpx 3rpx rgb(179, 193, 219);
+  box-shadow: 0 0 1px 1.5px rgb(179, 193, 219);
   position: absolute;
   left: 50%;
   top: 50%;
@@ -111,57 +127,55 @@ page{
 }
 
 .item-input {
-  height: 80rpx;
-  font-size: 36rpx;
-  margin-bottom: -6rpx;
+  height: 40px;
+  font-size: 18px;
+  margin-bottom: -3px;
 }
 
 .item-input_past {
-  height: 80rpx;
-  font-size: 36rpx;
+  height: 40px;
+  font-size: 18px;
   color: rgb(226, 77, 77);
 }
 
 .item-setTime {
-  height: 32rpx;
+  height: 16px;
   display: flex;
   align-items: center;
   color: #999;
-  /* line-height: 32rpx; */
-  font-size: 30rpx;
-  margin: -5rpx 0;
+  font-size: 15px;
+  margin: -2.5px 0;
 }
 
 .item-setTime .setTime-date {
   color: #999;
-  margin-right: 10rpx;
-  /* height: 30rpx; */
-  line-height: 16rpx;
+  margin-right: 5px;
+  line-height: 8px;
 }
 
 .item-setTime .setTime-time {
   color: #999;
-  margin-right: 10rpx;
-  line-height: 16rpx;
+  margin-right: 5px;
+  line-height: 8px;
 }
 
 .item-remark {
-  font-size: 20rpx;
+  font-size: 10px;
   color: #666;
-  line-height: 20rpx;
-  margin: 25rpx 0 -15rpx 0;
+  line-height: 10px;
+  margin: 12.5px 0 -7.5px 0;
 }
 .item-address {
- 	font-size: 20rpx;
+ 	font-size: 10px;
   color: rgb(102, 119, 156);
-  line-height: 20rpx;
-  margin: 20rpx 0 -15rpx 0;
+  line-height: 10px;
+  margin: 10px 0 -7.5px 0;
 }
 
 .item-every {
   color: #999;
-  line-height: 16rpx;
-	font-size: 26rpx
+  line-height: 8px;
+	font-size: 13px
 }
 
 
@@ -169,8 +183,8 @@ page{
 
 .remind-item .remind-right {
   float: right;
-  width: 100rpx;
-  height: 100rpx;
+  width: 50px;
+  height: 50px;
   position: relative;
 }
 
@@ -185,20 +199,20 @@ page{
 /* 底部新提醒 */
 
 .remind-bottom {
-  height: 120rpx;
+  height: 60px;
   width: 100%;
-  background-color: rgba(255, 245, 245, 0.9);
+  background-color: rgb(240, 240, 230);
   position: fixed;
   bottom: 0;
   display: flex;
   justify-content: start;
   align-items: center;
   z-index: 50;
-  box-shadow: 0 -2px 10px 5px rgba(189, 205, 235, 0.2);
+  box-shadow: 0 -2px 10px 5px rgba(202, 110, 34, 0.2);
 }
 
 .remind-bottom .new-remind {
-  color: #678dcf;
+  color: #829ac4;
   font-weight: 500;
-  font-size: 32rpx;
+  font-size: 16px;
 }

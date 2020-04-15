@@ -1,4 +1,10 @@
 /**index.wxss**/
+.i-container{
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center
+}
 .userinfo {
   display: flex;
   flex-direction: column;
@@ -13,7 +19,7 @@
 }
 
 .userinfo-nickname {
-  color: #aaa;
+  color: #ffffff;
 }
 
 .usermotto {

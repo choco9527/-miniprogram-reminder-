@@ -1,7 +1,7 @@
 <van-notify id="van-notify" />
-<view class="container">
+<view class="i-container  bg-gradual-blue">
   <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> open your reminder </button>
     <block wx:else>
       <image bindtap="toMain" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
       <text class="userinfo-nickname" bindtap="bindViewTap">{{userInfo.nickName}}</text>
@@ -10,4 +10,8 @@
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
   </view>
+	  <van-transition 
+		style="text-align: center;font-size:18px" show="{{showTitle}}" class="title" name="fade">
+        <text>做好一件事就够了</text>
+    </van-transition>
 </view>

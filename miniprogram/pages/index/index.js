@@ -8,7 +8,8 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    info: 'nothing'
+    info: 'nothing',
+		showTitle:false
   },
 
   // 生命周期start
@@ -55,9 +56,14 @@ Page({
         })
       }
     })
-
+		setTimeout(_=>{
+			this.setData({
+				showTitle:true
+			})
+		},600)
   },
   getInMain() { // 直接进入remain
+	return
     setTimeout(() => {
       if (app.globalData.openid && app.globalData.userInfo) {
         wx.navigateTo({

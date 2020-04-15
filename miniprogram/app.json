@@ -12,6 +12,7 @@
 		"navigationStyle": "custom"
 	},
 	"usingComponents": {
+		"van-nav-bar": "@vant/weapp/nav-bar/index",
 		"van-popup": "@vant/weapp/popup/index",
 		"van-field": "@vant/weapp/field/index",
 		"van-cell": "@vant/weapp/cell/index",
@@ -22,7 +23,9 @@
 		"van-action-sheet": "@vant/weapp/action-sheet/index",
 		"van-notify": "@vant/weapp/notify/index",
 		"van-icon": "@vant/weapp/icon/index",
-		"van-picker": "@vant/weapp/picker/index"
+		"van-picker": "@vant/weapp/picker/index",
+		"van-swipe-cell": "@vant/weapp/swipe-cell/index",
+		"van-image": "@vant/weapp/image/index"
 	},
 	"permission": {
 		"scope.userLocation": {

@@ -229,7 +229,7 @@ Page({
           type: 'success',
           message: '刷新成功',
           background: '#FFDAB9',
-          duration: 666
+          duration: 1000
         });
       }
     })
@@ -248,7 +248,6 @@ Page({
       that = this,
       remindList = [...that.data.remindList]
     remindList[i].isCompleted = !remindList[i].isCompleted
-    // console.log(remindList[i]);
 
     let timer = setTimeout(() => { // 1s后删除
       if ((!!remindList[i].isCompleted && !remindList[i].date) || remindList[i].repeat.type === 0) {
@@ -263,6 +262,22 @@ Page({
       timer
     }, that.updateCloudList)
   },
+	delItem(event) { // 左滑删除
+		let i = event.currentTarget.dataset.index,
+			that = this,
+			remindList = [...that.data.remindList];
+		remindList.splice(i, 1)
+		Notify({
+			type: 'success',
+			message: '已删除',
+			background: '#FFDAB9',
+			duration: 1200
+		});
+		that.setData({
+			remindList
+		}, that.updateCloudList)
+		
+	},
   newRemind(e) { // 新待办，设置订阅
     let that = this,
       remindList = [...that.data.remindList]
