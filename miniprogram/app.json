@@ -28,7 +28,8 @@
 		"van-button": "@vant/weapp/button/index",
 		"van-count-down": "@vant/weapp/count-down/index",
 		"van-grid": "@vant/weapp/grid/index",
-		"van-grid-item": "@vant/weapp/grid-item/index"
+		"van-grid-item": "@vant/weapp/grid-item/index",
+		"van-tag": "@vant/weapp/tag/index"
 	},
 	"permission": {
 		"scope.userLocation": {

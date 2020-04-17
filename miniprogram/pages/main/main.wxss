@@ -147,7 +147,8 @@ page {
 .item-input_past {
   height: 40px;
   font-size: 18px;
-  color: rgb(226, 77, 77);
+	font-weight: bold;
+  color: #D2691E;
 }
 
 .item-setTime {

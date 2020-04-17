@@ -51,6 +51,13 @@ App({
     userInfo: null
   },
 	// 设置监听器
+	/*
+	app.watch(this, {
+		test: function (newVal) {
+			console.log(newVal)
+		}
+	})
+	*/
 	watch: function (ctx, obj) {
 		Object.keys(obj).forEach(key => {
 			this.observer(ctx.data, key, ctx.data[key], function (value) {

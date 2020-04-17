@@ -1,43 +1,53 @@
 <van-notify id="van-notify" />
 
-  <van-cell size="large" icon="label-o" title="{{task.title}}" value="{{task.date.formaDate}}" label="{{task.remark}}" border="{{ false }}" />
+<van-cell size="large" icon="label-o"  label="{{task.locationObj.name}}" border="{{ true }}">
+  <view slot='title'>
+    <view>{{task.title}}</view>
+    <view>{{task.remark}}</view>
+  </view>
+	<view>
+		{{task.date.formaDate}}
+	</view>
+	<van-tag wx:if="{{task.past}}" plain type="danger" size="large">已到期</van-tag>
+	<van-tag wx:else plain type="success" size="large">未到期</van-tag>
+</van-cell>
 
-<van-count-down 
-class="control-count-down" 
-use-slot 
-time="{{ time }}" 
-bind:finish="finished"
-bind:change="onChange">
 
-<van-grid square clickable column-num="3">
-	<van-grid-item  use-slot>
-		<text class="item">{{ timeData.hours }}</text>
-	</van-grid-item>
-	<van-grid-item  use-slot>
-		<text class="item">{{ timeData.minutes }}</text>
-	</van-grid-item>
-	<van-grid-item  use-slot>
-		<text class="item">{{ timeData.seconds }}</text>
-	</van-grid-item>
-</van-grid>
+<van-transition show="{{ showLater }}" custom-class="block" name="fade-up">
 
-</van-count-down>
+  <van-count-down 
+	class="control-count-down" 
+	use-slot 
+	time="{{ time }}" 
+	bind:finish="finished" 
+	bind:change="onChange">
 
-<van-grid clickable column-num="3">
-  <van-grid-item text="继续" icon="play-circle-o" bindclick="start" />
-  <van-grid-item text="暂停" icon="pause-circle-o" bindclick="pause" />
-  <van-grid-item text="重置" icon="replay" bindclick="reset" />
-</van-grid>
+    <van-grid square clickable column-num="3">
+      <van-grid-item use-slot>
+        <text class="item">{{ timeData.hours }}</text>
+      </van-grid-item>
+      <van-grid-item use-slot>
+        <text class="item">{{ timeData.minutes }}</text>
+      </van-grid-item>
+      <van-grid-item use-slot>
+        <text class="item">{{ timeData.seconds }}</text>
+      </van-grid-item>
+      <!-- <van-grid-item use-slot>
+        <text class="item">{{ timeData.milliseconds }}</text>
+      </van-grid-item> -->
+    </van-grid>
+  </van-count-down>
 
-<van-transition show="{{ showTimePicker }}" custom-class="block" name="fade-up">
-	<van-datetime-picker
-		type="time"
-		value="{{ currentDate }}"
-		filter="{{ filter }}"
-		bind:confirm="onComfirm"
-		bind:cancel="onCancel"
-	/>
+  <van-grid clickable column-num="3">
+    <van-grid-item text="开始" icon="play-circle-o" bindclick="start" />
+    <van-grid-item text="暂停" icon="pause-circle-o" bindclick="pause" />
+    <van-grid-item text="重置" icon="replay" bindclick="reset" />
+  </van-grid>
+
+		<van-datetime-picker show-toolbar='{{false}}' type="time" value="{{ currentDate }}" filter="{{ filter }}" bind:input="onInput" />
+
 </van-transition>
 
 
-<van-button class="bot-btn" bindtap="remindLater" plain color="#D2B48C" round size="large" type="info">稍后提醒我</van-button>
+<van-button class="bot-btn-l" bindtap="remindLater" plain color="#D8BFD8" size="large" type="info">{{showLater ? '取消提醒我': '稍后提醒我'}}</van-button>
+<van-button class="bot-btn-r"  plain color="#D2B48C" size="large" type="info">已完成</van-button>

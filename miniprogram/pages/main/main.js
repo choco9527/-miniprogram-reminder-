@@ -200,6 +200,23 @@ Page({
         })
       })
   },
+	onHide() {
+		console.log('hide')
+		let that = this
+		let remindList = [...this.data.remindList]
+		remindList.forEach(item => {
+			item.date.dateStr = that.updateTime(item)
+			item.date.formaDate = moment(item.date.dateStr).calendar(null, {
+				lastWeek: '[上]ddd kk:mm',
+				nextWeek: '[下]ddd kk:mm',
+				sameElse: 'YYYY年M月D日 kk:mm'
+			})
+			item.date.formaDate1 = _formatTime(item.date.dateStr)
+			item.past = _hasPast(item.date.dateStr)
+			item.isCompleted = false
+		})
+		that.setData({ remindList },that.updateCloudList)
+	},
   onRefresh() { // 下拉刷新
     let that = this
     TODOS.where({
@@ -398,12 +415,13 @@ Page({
   },
   updateTime(task) { // 更新完成项目的时间
     if (!!task.isCompleted) { // 已完成
+			console.log('upDateTime')
       let newD = new Date(task.date.dateStr)
       let x = task.repeat.name[1] // 每x小时/天
 			if (+task.repeat.name[2] === +task.repeat.name[2]) {
         x = x + task.repeat.name[2] // '1'+'0' = '10'
       }
-			console.log(x)
+			// console.log(x)
       switch (task.repeat.type) {
         case 1: // 每小时
           let hour = new Date(task.date.dateStr).getHours() + 1

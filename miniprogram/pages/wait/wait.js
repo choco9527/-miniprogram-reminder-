@@ -11,16 +11,18 @@ Page({
 		task:'', // 当前任务对象
 		time: 0,
 		timeData: {},
-		showTimePicker:false,
-		currentDate: '12:00',
+		showLater:false,
+		currentDate: '1:00',
 		filter(type, options) {
-			if (type === 'minute') {
+			 if(type === 'minute') {
 				return options.filter(option => option % 5 === 0)
 			}
 			return options;
 		}
 	},
-
+	page:{
+		timeTemp:0 // 中转储存time
+	},
 	onLoad: function (options) {
 		if(!options.index) {
 			Notify({ type: 'danger', message: '未获取参数' });
@@ -77,29 +79,23 @@ Page({
 	},
 	remindLater () {
 		this.setData({
-			showTimePicker: true
+			showLater: !this.data.showLater
 		})
 	},
-	onComfirm (e) { // 确认时间
-		// console.log(e.detail) // 12:05
+	onInput (e) { // 确认时间
+		// console.log(e.detail) // 12:05 
 		let timeStr = e.detail,
 		 a = timeStr.split(':');
-		let h = +a[0],m = +a[1];
-		console.log(h,m)
+		let h = +(a[0]),m = +(a[1]);
+		if(h===0 && m===0) return
+		this.page.timeTemp = (h * 60 * 60 * 1000) + (m * 60 * 1000)
+	},
 
-		this.setData({
-			time: (h * 60 * 60 * 1000) + (m * 60 * 1000),
-			showTimePicker: false
-		})
-	},
-	onCancel () {
-		this.setData({
-			showTimePicker: false
-		})
-	},
 	start() {
 		const countDown = this.selectComponent('.control-count-down');
 		countDown.start();
+		this.setData({time:this.page.timeTemp})
+		// console.log(this.data.timeData)
 	},
 
 	pause() {
