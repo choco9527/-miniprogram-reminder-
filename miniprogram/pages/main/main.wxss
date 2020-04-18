@@ -147,7 +147,6 @@ page {
 .item-input_past {
   height: 40px;
   font-size: 18px;
-	font-weight: bold;
   color: #D2691E;
 }
 

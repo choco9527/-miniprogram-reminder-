@@ -42,9 +42,10 @@ exports.main = async(event, context) => {
     for (let j = 0, rl = remindList.length; j < rl; j++) { // 循环每个用户的list
       let now = currentDate
       let dateStr = _formatTime(remindList[j].date.dateStr)
+			let rLater = remindList[j].date.rLater ? _formatTime(remindList[j].date.rLater) : 0 // 稍后提醒
 			let title = remindList[j].title
       // return { now, dateStr }
-			if (now === dateStr && !!title) {
+			if ((now === dateStr || now === rLater) && !!title) { // 等于稍后提醒 还是 现在
         taskList.push({
           openid: allData[i]._openid, // 提醒谁
           taskId: allData[i]._id, // 提醒哪份

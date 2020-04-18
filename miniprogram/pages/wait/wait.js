@@ -4,11 +4,11 @@ const app = getApp()
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify.js';
 
 Page({
-
 	data: {
 		openid:'',
 		counterId:'',
-		task:'', // 当前任务对象
+		index:-1, // 任务在数组中的位置
+		task:{}, // 当前任务对象
 		time: 0,
 		timeData: {},
 		showLater:false,
@@ -21,7 +21,8 @@ Page({
 		}
 	},
 	page:{
-		timeTemp:0 // 中转储存time
+		timeTemp:0, // 中转储存time
+		currentDateStr: 0 // 当前时间时间戳
 	},
 	onLoad: function (options) {
 		if(!options.index) {
@@ -58,12 +59,14 @@ Page({
 				if (res.data.length > 0) {
 					let remindList = [...res.data[0].remindList],
 						counterId = res.data[0]._id,
-						task = remindList[options.index];
-					
+						task = remindList[options.index],
+						index = options.index;
+
 					console.log(task)
 					that.setData({
 						task,
-						counterId
+						counterId,
+						index
 					})
 				}
 			}).catch(err => {
@@ -76,6 +79,32 @@ Page({
 					mask: true
 				})
 			})
+	},
+	_updateMainCloudList(addTime) { // 更新数据库稍后提醒时间(接收时间戳）
+		let t = !!addTime ? addTime + new Date().getTime() : 0
+		if(!!addTime) {
+			console.log('开始提醒')
+		}else{
+			console.log('取消提醒')
+		}
+		let remindList = [],that = this;
+		TODOS.doc(that.data.counterId).get().then(res => {
+			// console.log(res.data.remindList,that.data.index)
+			remindList = [...res.data.remindList]
+			let task = that.data.task
+			task.date['rLater'] = t
+			remindList[that.data.index] = task
+			return remindList
+		})
+		.then(list => {
+			// console.log(list)
+			TODOS.doc(that.data.counterId).update({
+				data: {
+					remindList:list
+				}
+			})
+		})
+
 	},
 	remindLater () {
 		this.setData({
@@ -92,21 +121,26 @@ Page({
 	},
 
 	start() {
+		this._getStart()
 		const countDown = this.selectComponent('.control-count-down');
 		countDown.start();
 		this.setData({time:this.page.timeTemp})
-		// console.log(this.data.timeData)
+		this._updateMainCloudList(this.data.time)
+		// console.log(this.data.timeData,this.data.time)
 	},
 
 	pause() {
 		const countDown = this.selectComponent('.control-count-down');
 		countDown.pause();
+		this._updateMainCloudList() // 更新为0，即不提醒
+		// console.log(this.page.currentDateStr)
 	},
 
 	reset() {
 		const countDown = this.selectComponent('.control-count-down');
 		countDown.reset();
 	},
+
 	onChange(e) {
 		this.setData({
 			timeData: e.detail
