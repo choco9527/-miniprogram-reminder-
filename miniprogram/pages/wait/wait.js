@@ -121,7 +121,6 @@ Page({
 	},
 
 	start() {
-		this._getStart()
 		const countDown = this.selectComponent('.control-count-down');
 		countDown.start();
 		this.setData({time:this.page.timeTemp})
@@ -139,6 +138,7 @@ Page({
 	reset() {
 		const countDown = this.selectComponent('.control-count-down');
 		countDown.reset();
+		this._updateMainCloudList(this.data.time)
 	},
 
 	onChange(e) {
