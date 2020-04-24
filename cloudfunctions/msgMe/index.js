@@ -16,7 +16,7 @@ exports.main = async (event, context) => {
 		let remindList = res.data.remindList
 		const result = await cloud.openapi.subscribeMessage.send({
 			touser: event.openid,
-			page: 'pages/main/main',
+			page: 'pages/wait/wait?index=' + i,
 			lang: 'zh_CN',
 			data: {
 				thing1: {	// 日程主题

@@ -1,15 +1,15 @@
 .bot-btn-l{
 	position: fixed;
 	bottom: 10px;
-	width:40%;
-	left: 25%;
-	transform: translateX(-50%)
+	width:30%;
+	left: 30%;
+	transform: translateX(-50%);
 }
 .bot-btn-r{
 	position: fixed;
 	bottom: 10px;
-	width:40%;
-	left: 75%;
+	width:30%;
+	left: 70%;
 	transform: translateX(-50%)
 }
 .item {

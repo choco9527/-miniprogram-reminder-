@@ -162,18 +162,7 @@ Page({
         if (res.data.length > 0) {
           let remindList = [...res.data[0].remindList],
             counterId = res.data[0]._id;
-          remindList.forEach(item => {
-            item.date.dateStr = that.updateTime(item)
-            item.date.formaDate = moment(item.date.dateStr).calendar(null, {
-              lastWeek: '[上]ddd kk:mm',
-              nextWeek: '[下]ddd kk:mm',
-              sameElse: 'YYYY年M月D日 kk:mm'
-            })
-            item.date.formaDate1 = _formatTime(item.date.dateStr)
-            item.past = _hasPast(item.date.dateStr)
-            item.isCompleted = false
-          })
-
+          remindList = that.updateRemindList(remindList)
           that.setData({
             remindList,
             counterId
@@ -190,7 +179,7 @@ Page({
           })
         }
       }).catch(err => {
-        console.log(err)
+        // console.log(err)
         wx.showToast({
           title: '获取列表失败',
           icon: 'none',
@@ -200,23 +189,15 @@ Page({
         })
       })
   },
-	onHide() {
-		console.log('hide')
-		let that = this
-		let remindList = [...this.data.remindList]
-		remindList.forEach(item => {
-			item.date.dateStr = that.updateTime(item)
-			item.date.formaDate = moment(item.date.dateStr).calendar(null, {
-				lastWeek: '[上]ddd kk:mm',
-				nextWeek: '[下]ddd kk:mm',
-				sameElse: 'YYYY年M月D日 kk:mm'
-			})
-			item.date.formaDate1 = _formatTime(item.date.dateStr)
-			item.past = _hasPast(item.date.dateStr)
-			item.isCompleted = false
-		})
-		that.setData({ remindList },that.updateCloudList)
-	},
+  onHide() {
+    console.log('hide')
+    let that = this
+    let remindList = [...this.data.remindList]
+    remindList = that.updateRemindList(remindList)
+    that.setData({
+      remindList
+    }, that.updateCloudList)
+  },
   onRefresh() { // 下拉刷新
     let that = this
     TODOS.where({
@@ -225,18 +206,7 @@ Page({
       if (res.data.length > 0) {
         let remindList = [...res.data[0].remindList],
           counterId = res.data[0]._id;
-        remindList.forEach(item => {
-          item.date.dateStr = that.updateTime(item)
-          item.date.formaDate = moment(item.date.dateStr).calendar(null, {
-            lastWeek: '[上]ddd kk:mm',
-            nextWeek: '[下]ddd kk:mm',
-            sameElse: 'YYYY年M月D日 kk:mm'
-          })
-          item.date.formaDate1 = _formatTime(item.date.dateStr)
-          item.past = _hasPast(item.date.dateStr)
-          item.isCompleted = false
-        })
-
+        remindList = that.updateRemindList(remindList)
         that.setData({
           remindList,
           counterId,
@@ -250,6 +220,21 @@ Page({
         });
       }
     })
+  },
+  updateRemindList(list) {
+		let that = this
+    list.forEach(item => {
+      item.date.dateStr = that.updateTime(item)
+      item.date.formaDate = moment(item.date.dateStr).calendar(null, {
+        lastWeek: '[上]ddd kk:mm',
+        nextWeek: '[下]ddd kk:mm',
+        sameElse: 'YYYY年M月D日 kk:mm'
+      })
+      item.date.formaDate1 = _formatTime(item.date.dateStr)
+      item.past = _hasPast(item.date.dateStr)
+      item.isCompleted = false
+    })
+    return list
   },
   updateCloudList() { // 更新数据库
     // console.log('updateCloud')
@@ -279,28 +264,28 @@ Page({
       timer
     }, that.updateCloudList)
   },
-	delItem(event) { // 右滑删除
-		let i = event.currentTarget.dataset.index,
-			that = this,
-			remindList = [...that.data.remindList];
-		remindList.splice(i, 1)
-		Notify({
-			type: 'success',
-			message: '已删除',
-			background: '#FFDAB9',
-			duration: 1200
-		});
-		that.setData({
-			remindList
-		}, that.updateCloudList)
-	},
-	navToWait(event) { // 左滑跳转
-		let i = event.currentTarget.dataset.index
-		let url = '../wait/wait?index=' + i
-		wx.navigateTo({
-			url
-		})
-	},
+  delItem(event) { // 右滑删除
+    let i = event.currentTarget.dataset.index,
+      that = this,
+      remindList = [...that.data.remindList];
+    remindList.splice(i, 1)
+    Notify({
+      type: 'success',
+      message: '已删除',
+      background: '#FFDAB9',
+      duration: 1200
+    });
+    that.setData({
+      remindList
+    }, that.updateCloudList)
+  },
+  navToWait(event) { // 左滑跳转
+    let i = event.currentTarget.dataset.index
+    let url = '../wait/wait?index=' + i
+    wx.navigateTo({
+      url
+    })
+  },
   newRemind(e) { // 新待办，设置订阅
     let that = this,
       remindList = [...that.data.remindList]
@@ -415,13 +400,13 @@ Page({
   },
   updateTime(task) { // 更新完成项目的时间
     if (!!task.isCompleted) { // 已完成
-			console.log('upDateTime')
+      console.log('upDateTime')
       let newD = new Date(task.date.dateStr)
       let x = task.repeat.name[1] // 每x小时/天
-			if (+task.repeat.name[2] === +task.repeat.name[2]) {
+      if (+task.repeat.name[2] === +task.repeat.name[2]) {
         x = x + task.repeat.name[2] // '1'+'0' = '10'
       }
-			// console.log(x)
+      // console.log(x)
       switch (task.repeat.type) {
         case 1: // 每小时
           let hour = new Date(task.date.dateStr).getHours() + 1
