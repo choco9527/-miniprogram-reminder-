@@ -30,7 +30,8 @@
 		"van-grid": "@vant/weapp/grid/index",
 		"van-grid-item": "@vant/weapp/grid-item/index",
 		"van-tag": "@vant/weapp/tag/index",
-		"van-dialog": "@vant/weapp/dialog/index"
+		"van-dialog": "@vant/weapp/dialog/index",
+		"van-toast": "@vant/weapp/toast/index"
 	},
 	"permission": {
 		"scope.userLocation": {

@@ -3,6 +3,7 @@ const TODOS = db.collection('todos')
 const app = getApp()
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify.js';
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog';
+import Toast from '../../miniprogram_npm/@vant/weapp/toast/toast';
 Page({
   data: {
     openid: '',
@@ -179,9 +180,15 @@ Page({
               remindList
             }
           }).then(_=>{
-						that._getTaskData()
+						Toast.success('已完成');
+						setTimeout(()=>{
+							wx.navigateTo({
+								url: '../main/main' 
+							})
+						},500)
 					})
         }
+				
       }).catch(() => {
         return false
       });

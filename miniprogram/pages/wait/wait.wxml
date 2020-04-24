@@ -1,5 +1,6 @@
 <van-notify id="van-notify" />
 <van-dialog id="van-dialog" />
+<van-toast id="van-toast" />
 <van-cell size="large" icon="label-o"  label="{{task.locationObj.name}}" border="{{ true }}">
   <view slot='title'>
     <view>{{task.title}}</view>
