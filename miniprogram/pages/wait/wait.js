@@ -19,14 +19,15 @@ Page({
         return options.filter(option => option % 5 === 0)
       }
       return options;
-    }
+    },
+    showCell: false
   },
   page: {
     timeTemp: 0, // 中转储存time
     currentDateStr: 0 // 当前时间时间戳
   },
   onLoad: function(options) {
-		let that = this
+    let that = this
     if (!options.index) {
       Notify({
         type: 'danger',
@@ -37,24 +38,26 @@ Page({
       })
       return
     }
-		// 获取openid
-		if (app.globalData.openid) {
-			that.setData({
-				openid: app.globalData.openid
-			})
-		} else {
-			wx.cloud.callFunction({
-				name: 'login',
-				data: {},
-				success: res => {
-					app.globalData.openid = res.result.openid
-					that.setData({
-						openid: app.globalData.openid
-					})
-				}
-			})
-		}
-		this.setData({ index: options.index }, this._getTaskData()) // 加載主數據庫
+    // 获取openid
+    if (app.globalData.openid) {
+      that.setData({
+        openid: app.globalData.openid
+      })
+    } else {
+      wx.cloud.callFunction({
+        name: 'login',
+        data: {},
+        success: res => {
+          app.globalData.openid = res.result.openid
+          that.setData({
+            openid: app.globalData.openid
+          })
+        }
+      })
+    }
+    this.setData({
+      index: options.index
+    }, this._getTaskData()) // 加載主數據庫
   },
   _getTaskData() {
     let that = this
@@ -68,12 +71,15 @@ Page({
           let remindList = [...res.data[0].remindList],
             counterId = res.data[0]._id,
             task = remindList[that.data.index];
-
           console.log(task)
           that.setData({
             task,
             counterId
-          })
+          }, setTimeout(_ => {
+            that.setData({
+              showCell: true
+            })
+          }, 200))
         }
       }).catch(err => {
         console.log(err)
@@ -111,12 +117,16 @@ Page({
           }
         })
       })
-
   },
   remindLater() {
+    let cancelLater = () => {
+      if (!this.data.showLater) { // 关闭时取消提醒
+        this._updateMainCloudList() // 更新为0，即不提醒
+      }
+    }
     this.setData({
       showLater: !this.data.showLater
-    })
+    }, cancelLater)
   },
   onInput(e) { // 确认时间
     // console.log(e.detail) // 12:05 
@@ -179,16 +189,18 @@ Page({
             data: {
               remindList
             }
-          }).then(_=>{
-						Toast.success('已完成');
-						setTimeout(()=>{
-							wx.navigateTo({
-								url: '../main/main' 
-							})
-						},500)
-					})
+          }).then(_ => {
+            that.setData({
+              showCell: false
+            })
+            Toast.success('已完成');
+            setTimeout(() => {
+              wx.navigateTo({
+                url: '../main/main'
+              })
+            }, 500)
+          })
         }
-				
       }).catch(() => {
         return false
       });

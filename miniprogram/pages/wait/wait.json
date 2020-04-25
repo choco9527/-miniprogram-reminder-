@@ -1,4 +1,5 @@
 {
   "usingComponents": {},
-	"navigationBarTextStyle": "black"
+	"navigationBarTextStyle": "black",
+	"navigationBarTitleText": "稍后提醒"
 }

@@ -21,10 +21,9 @@ Component({
       type: Object,
       value: null
     }
-
   },
   data: {
-    item: null,
+		item: null,
     timer: null,
     isOnDate: false,
     showDatePick: false,
@@ -86,11 +85,11 @@ Component({
       }
       let isOnLocation = !!newVal ? !!newVal.locationObj.name : false
       this.setData({
-        item: newVal,
         currentDate: date,
         dateText,
         isOnDate,
-        isOnLocation
+        isOnLocation,
+				item: newVal
       })
     },
   },
@@ -118,9 +117,9 @@ Component({
       var that = this
       clearTimeout(that.data.timer) // 防抖
       var timer = setTimeout(() => {
-        that.setData({
-          'item.title': e.detail
-        })
+				that.setData({
+					'item.title': e.detail
+				})
         that.saveItem()
       }, 500)
       that.setData({

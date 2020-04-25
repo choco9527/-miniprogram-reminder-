@@ -127,6 +127,7 @@ Page({
     //   focus: false,
     // 	 past: false // 是否过期
     // }
+    showList: false,
     popupItem: null,
     popupIndex: -1,
     showPopup: false,
@@ -165,7 +166,8 @@ Page({
           remindList = that.updateRemindList(remindList)
           that.setData({
             remindList,
-            counterId
+            counterId,
+            showList: true
           })
         } else { // 如无该用户数据库则添加
           TODOS.add({
@@ -222,7 +224,7 @@ Page({
     })
   },
   updateRemindList(list) {
-		let that = this
+    let that = this
     list.forEach(item => {
       item.date.dateStr = that.updateTime(item)
       item.date.formaDate = moment(item.date.dateStr).calendar(null, {

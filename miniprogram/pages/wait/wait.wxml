@@ -1,20 +1,21 @@
 <van-notify id="van-notify" />
 <van-dialog id="van-dialog" />
 <van-toast id="van-toast" />
-<van-cell size="large" icon="label-o"  label="{{task.locationObj.name}}" border="{{ true }}">
-  <view slot='title'>
-    <view>{{task.title}}</view>
-    <view>{{task.remark}}</view>
-  </view>
-	<view>
-		{{task.date.formaDate}}
-	</view>
-	<van-tag wx:if="{{task.past}}" plain type="danger" round size="medium">已到期</van-tag>
-	<van-tag wx:else plain type="success" round size="medium">未到期</van-tag>
-</van-cell>
+<van-transition show="{{ showCell }}"  name="fade-down">
+	<van-cell size="large" icon="label-o"  label="{{task.locationObj.name}}" border="{{ true }}">
+		<view slot='title'>
+			<view>{{task.title}}</view>
+			<view>{{task.remark}}</view>
+		</view>
+		<view>
+			{{task.date.formaDate}}
+		</view>
+		<van-tag wx:if="{{task.past}}" plain type="danger" round size="medium">已到期</van-tag>
+		<van-tag wx:else plain type="success" round size="medium">未到期</van-tag>
+	</van-cell>
+</van-transition>
 
-
-<van-transition show="{{ showLater }}" custom-class="block" name="fade-up">
+<van-transition show="{{ showLater }}" custom-class="block" name="fade">
 
   <van-count-down 
 	class="control-count-down" 
@@ -48,7 +49,6 @@
 		<van-datetime-picker show-toolbar='{{false}}' type="time" value="{{ currentDate }}" filter="{{ filter }}" bind:input="onInput" />
 
 </van-transition>
-
 
 <van-button round="{{true}}" class="bot-btn-l" bindtap="remindLater" plain color="#D8BFD8" size="large" type="info">{{showLater ? '取消提醒我': '稍后提醒我'}}</van-button>
 <van-button round="{{true}}" class="bot-btn-r" bindtap="onCompelete" plain color="#D2B48C" size="large" type="info">已完成</van-button>
