@@ -36,4 +36,6 @@
       </van-transition>
     </block>
   </van-action-sheet>
+		<van-button icon="success"  wx:if="{{!showDatePick}}" custom-class="bottom-btn" class="bottom-btn-wrapper" type="default" round bindtap="closeDetail"></van-button>
+
 </view>

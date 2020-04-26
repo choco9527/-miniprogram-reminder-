@@ -38,12 +38,14 @@ page {
   margin-top: 10px;
   padding: 0 5px;
 }
-.list-loading{
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate3d(-50%,-50%,0)
+
+.list-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
 }
+
 .remind-list .remind-item {
   height: 100%;
   margin-bottom: 5px;
@@ -65,11 +67,13 @@ page {
   position: relative;
   width: 65px;
   height: 100px;
-	margin: 0 1px
+  margin: 0 1px;
 }
+
 .remind-list .slide.left {
   background-color: #ce5050;
 }
+
 .remind-list .slide.right {
   background-color: #f5c194;
 }
@@ -147,12 +151,14 @@ page {
   height: 40px;
   font-size: 18px;
   margin-bottom: -3px;
+  width: 300px;
 }
 
 .item-input_past {
   height: 40px;
   font-size: 18px;
-  color: #D2691E;
+  color: #d2691e;
+  width: 300px;
 }
 
 .item-setTime {

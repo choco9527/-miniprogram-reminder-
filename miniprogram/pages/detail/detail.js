@@ -17,7 +17,7 @@ Component({
     styleIsolation: 'isolated'
   },
   properties: {
-    propItem: {
+    propItem:{
       type: Object,
       value: null
     }
@@ -281,7 +281,10 @@ Component({
           that.saveItem()
         },
       })
-    }
+    },
+		closeDetail() {
+			this.triggerEvent('closeData')
+		}
   }
 
 });

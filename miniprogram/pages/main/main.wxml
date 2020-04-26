@@ -2,8 +2,8 @@
   <van-notify safeAreaInsetTop="{{true}}" id="van-notify" />
 
   <view class="remind-top">
-    <text class="title" wx:if="{{remindList.length > 0}}">Just Remind</text>
-    <text class="title" wx:else>Add My Remind</text>
+    <text class="title" wx:if="{{remindList.length > 0}}">時 移</text>
+    <text class="title" wx:else>Add A Reminder</text>
   </view>
 
   <scroll-view scroll-y="{{true}}" style="width: 100%; height: 1040rpx;" enable-back-to-top="{{true}}" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-triggered="{{triggered}}" bindrefresherrefresh="onRefresh">
@@ -24,7 +24,7 @@
             </view>
           </view>
           <view class="remind-item_mid">
-            <input class="{{item.past ? 'item-input_past':'item-input'}}" type="text" focus="{{item.focus}}" value="{{item.title}}" maxlength="15" data-index="{{index}}" catchfocus="inputFocus" bindblur="inputBlur" disabled="{{showPopup}}" bindinput="inputChange"
+            <input class="{{item.past ? 'item-input_past':'item-input'}}" type="text" focus="{{item.focus}}" value="{{item.title}}" maxlength="18" data-index="{{index}}" catchfocus="inputFocus" bindblur="inputBlur" disabled="{{showPopup}}" bindinput="inputChange"
             />
             <view class="item-setTime" wx:if="{{!!item.date.dateStr}}">
               <text class="setTime-date" selectable="false" space="false" decode="false">
@@ -61,8 +61,9 @@
 </view>
 
 <!-- 详情弹出层start -->
-<van-popup close-on-click-overlay="{{false}}" show="{{ showPopup }}" position="bottom" closeable close-icon="success" bind:close="onCloseDeta" duration="160" custom-style="height:90%;background-color:#FFE4E1">
+<van-popup close-on-click-overlay="{{false}}" show="{{ showPopup }}" position="bottom"  
+  duration="160" custom-style="height:70%;background-color:#FFE4E1">
   <!-- Detail子组件 -->
-  <Detail bindsaveRemind="saveByDetail" prop-item="{{popupItem}}"></Detail>
+  <Detail bindcloseData="onCloseDeta" bindsaveRemind="saveByDetail" prop-item="{{popupItem}}"></Detail>
 </van-popup>
 <!-- 详情弹出层end -->

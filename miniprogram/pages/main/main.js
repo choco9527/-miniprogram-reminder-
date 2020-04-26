@@ -137,22 +137,7 @@ Page({
     triggered: false,
   },
   onLoad() {
-    if (app.globalData.openid) {
-      this.setData({
-        openid: app.globalData.openid
-      })
-    } else {
-      wx.cloud.callFunction({
-        name: 'login',
-        data: {},
-        success: res => {
-          app.globalData.openid = res.result.openid
-          this.setData({
-            openid: app.globalData.openid
-          })
-        }
-      })
-    }
+		this._getOpenId()
     // console.log('openid',this.data.openid)
     let that = this
     TODOS.where({
@@ -189,7 +174,8 @@ Page({
           duration: 1000,
           mask: true
         })
-      })
+			})
+		this._getSetting()
   },
   onHide() {
     console.log('hide')
@@ -223,6 +209,37 @@ Page({
       }
     })
   },
+	_getOpenId() { // 纯工具函数
+		if (app.globalData.openid) {
+			this.setData({
+				openid: app.globalData.openid
+			})
+		} else {
+			wx.cloud.callFunction({
+				name: 'login',
+				data: {},
+				success: res => {
+					app.globalData.openid = res.result.openid
+					this.setData({
+						openid: app.globalData.openid
+					})
+				}
+			})
+		}
+	},
+	_getSetting() {
+		wx.getSetting({
+			withSubscriptions:true,
+			success(res) {
+				console.log(res.subscriptionsSetting)
+				if (res.subscriptionsSetting.itemSettings && res.subscriptionsSetting.itemSettings[templateId] === 'accept') {
+					console.log('用户已同意')
+				} else {
+					console.log('用户不同意')					
+				}
+			}
+		})
+	},
   updateRemindList(list) {
     let that = this
     list.forEach(item => {
@@ -394,7 +411,7 @@ Page({
     });
   },
   onCloseDeta() {
-    // console.log('关闭详情')
+    console.log('关闭详情')
     this.setData({
       showPopup: false,
       popupIndex: -1
