@@ -2,6 +2,7 @@
 	"usingComponents": {
 		"Detail": "../pages/detail/detail"
 	},
+	"disableScroll": true,
 	"enablePullDownRefresh": false,
 		"navigationStyle": "custom"
 }

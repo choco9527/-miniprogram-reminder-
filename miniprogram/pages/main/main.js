@@ -114,19 +114,6 @@ const _hasPast = (number) => { // 判断过期与否
 Page({
   data: {
     remindList: [],
-    // {
-    //   isCompleted: false,
-    //   title: '摇号延期',
-    //   remark: '',
-    // 		date: {
-    // 		formaDate: '昨天', // 语义时间
-    // 		formaDate1: 'Y年M月D日 h:m', // 表述时间
-    // 		dateStr: '' // 时间戳
-    // 			},
-    //   repeat: {name:'永不',type:0},
-    //   focus: false,
-    // 	 past: false // 是否过期
-    // }
     showList: false,
     popupItem: null,
     popupIndex: -1,
@@ -135,9 +122,12 @@ Page({
     openid: '',
     counterId: '',
     triggered: false,
+    showNewBtn: false,
+		isNight: new Date().getHours()<=6 || new Date().getHours() >= 20 // 20-6夜间模式
+
   },
   onLoad() {
-		this._getOpenId()
+    this._getOpenId()
     // console.log('openid',this.data.openid)
     let that = this
     TODOS.where({
@@ -152,16 +142,36 @@ Page({
           that.setData({
             remindList,
             counterId,
-            showList: true
+            showList: true,
+            showNewBtn: true
           })
         } else { // 如无该用户数据库则添加
           TODOS.add({
             data: {
-              remindList: []
+              remindList: [{
+                isCompleted: false,
+                title: '點我輸入 試試左右滑動',
+                remark: '',
+                date: {
+                  formaDate: '',
+                  formaDate1: '',
+                  dateStr: '' // 时间戳
+                },
+                repeat: {
+                  name: '永不',
+                  type: 0
+                },
+                locationObj: {
+                  name: ''
+                },
+                focus: false,
+                past: false
+              }]
             }
           }).then(res => {
             that.setData({
-              counterId: res._id
+              counterId: res._id,
+              showNewBtn: true
             })
           })
         }
@@ -174,8 +184,8 @@ Page({
           duration: 1000,
           mask: true
         })
-			})
-		this._getSetting()
+      })
+    this._getSetting()
   },
   onHide() {
     console.log('hide')
@@ -209,37 +219,37 @@ Page({
       }
     })
   },
-	_getOpenId() { // 纯工具函数
-		if (app.globalData.openid) {
-			this.setData({
-				openid: app.globalData.openid
-			})
-		} else {
-			wx.cloud.callFunction({
-				name: 'login',
-				data: {},
-				success: res => {
-					app.globalData.openid = res.result.openid
-					this.setData({
-						openid: app.globalData.openid
-					})
-				}
-			})
-		}
-	},
-	_getSetting() {
-		wx.getSetting({
-			withSubscriptions:true,
-			success(res) {
-				console.log(res.subscriptionsSetting)
-				if (res.subscriptionsSetting.itemSettings && res.subscriptionsSetting.itemSettings[templateId] === 'accept') {
-					console.log('用户已同意')
-				} else {
-					console.log('用户不同意')					
-				}
-			}
-		})
-	},
+  _getOpenId() { // 纯工具函数
+    if (app.globalData.openid) {
+      this.setData({
+        openid: app.globalData.openid
+      })
+    } else {
+      wx.cloud.callFunction({
+        name: 'login',
+        data: {},
+        success: res => {
+          app.globalData.openid = res.result.openid
+          this.setData({
+            openid: app.globalData.openid
+          })
+        }
+      })
+    }
+  },
+  _getSetting() {
+    wx.getSetting({
+      withSubscriptions: true,
+      success(res) {
+        console.log(res.subscriptionsSetting)
+        if (res.subscriptionsSetting.itemSettings && res.subscriptionsSetting.itemSettings[templateId] === 'accept') {
+          console.log('用户已同意')
+        } else {
+          console.log('用户不同意')
+        }
+      }
+    })
+  },
   updateRemindList(list) {
     let that = this
     list.forEach(item => {
@@ -333,9 +343,9 @@ Page({
             focus: true,
             past: false
           })
-
           that.setData({
-            remindList
+            remindList,
+            showNewBtn: false
           }, that.updateCloudList)
 
         } else {
@@ -355,13 +365,12 @@ Page({
         console.error(err)
       }
     })
-
   },
   inputBlur(e) { // 保存事项，删除空事项
     // console.log('blur');
     let that = this,
       i = e.currentTarget.dataset.index,
-      remindList = [...that.data.remindList]
+      remindList = [...that.data.remindList];
     remindList[i].focus = false
 
     if (e.detail.value === '') {
@@ -370,7 +379,8 @@ Page({
       remindList[i].title = e.detail.value
     }
     that.setData({
-      remindList
+      remindList,
+      showNewBtn: true
     }, that.updateCloudList)
   },
   inputChange(e) {
@@ -401,14 +411,16 @@ Page({
     }, that.updateCloudList)
   },
   showDetail(e) { // 显示详情
-    let popupItem = e.currentTarget.dataset.item,
-      popupIndex = e.currentTarget.dataset.index,
-      that = this;
-    that.setData({
-      showPopup: true,
-      popupItem,
-      popupIndex
-    });
+    setTimeout(_ => { // 需要在blur之後進行
+      let popupItem = e.currentTarget.dataset.item,
+        popupIndex = e.currentTarget.dataset.index,
+        that = this;
+      that.setData({
+        showPopup: true,
+        popupItem,
+        popupIndex
+      });
+    },50)
   },
   onCloseDeta() {
     console.log('关闭详情')
@@ -417,6 +429,9 @@ Page({
       popupIndex: -1
     });
   },
+	toggleNight() { // 切换夜间模式
+		this.setData({ isNight: !this.data.isNight })
+	},
   updateTime(task) { // 更新完成项目的时间
     if (!!task.isCompleted) { // 已完成
       console.log('upDateTime')
@@ -454,7 +469,6 @@ Page({
       return task.date.dateStr
     }
   },
-
   saveByDetail(e) { // 子组件触发保存
     let that = this,
       remindList = [...that.data.remindList],

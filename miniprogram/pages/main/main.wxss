@@ -1,4 +1,4 @@
-/* pages/main/main.wxss */
+@import '../../style/background.wxss';
 
 body {
   font-family: Helvetica,
@@ -141,24 +141,63 @@ page {
 
 .remind-item .remind-item_mid {
   height: 100%;
+  max-width: 250px;
   float: left;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
 }
 
+@media screen and (max-width :374px) { /*小于375 5*/
+  .remind-item .remind-item_mid {
+   max-width: 200px;
+  }
+	.item-input,.item-input_past{
+		width:200px
+	}
+}
+@media screen and (min-width :375px) and (max-width :413px) { /*375-414 6*/
+  .remind-item .remind-item_mid {
+   max-width: 260px;
+  }
+	.item-input,.item-input_past{
+		width:260px
+	}
+}
+@media screen and (min-width :414px) and (max-width :767px) { /*415-767 6p-ipad*/
+  .remind-item .remind-item_mid {
+   max-width: 300px;
+  }
+	.item-input,.item-input_past{
+		width:300px
+	}
+}
+@media screen and (min-width :768px) { /*大于768 ipad*/
+  .remind-item .remind-item_mid {
+   max-width: 500px;
+  }
+	.item-input,.item-input_past{
+		width:500px
+	}
+}
+
+/* item 中间内容end */
+
 .item-input {
   height: 40px;
   font-size: 18px;
   margin-bottom: -3px;
-  width: 300px;
+  flex: 1
+}
+
+.item-input.input-night{
+  color: ghostwhite;
 }
 
 .item-input_past {
   height: 40px;
   font-size: 18px;
   color: #d2691e;
-  width: 300px;
 }
 
 .item-setTime {
@@ -233,7 +272,9 @@ page {
   z-index: 50;
   box-shadow: 0 -2px 10px 5px rgba(202, 110, 34, 0.2);
 }
-
+.remind-bottom.bottom-night{
+  background-color: rgb(36, 115, 151);
+}
 .remind-bottom .new-remind {
   color: #829ac4;
   font-weight: 500;

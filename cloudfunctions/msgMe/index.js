@@ -14,13 +14,14 @@ exports.main = async (event, context) => {
 		let res = await TODOS.doc(event.taskId).get() // 获取当前用户全部list
 		let i = event.index
 		let remindList = res.data.remindList
+		let title = remindList[i].title
 		const result = await cloud.openapi.subscribeMessage.send({
 			touser: event.openid,
-			page: 'pages/wait/wait?index=' + i,
+			page: 'pages/wait/wait?index=' + i + '&title=' + title,
 			lang: 'zh_CN',
 			data: {
 				thing1: {	// 日程主题
-					value: remindList[i].title
+					value: title
 				},
 				time2: { // 日程时间
 					value: remindList[i].date.formaDate1

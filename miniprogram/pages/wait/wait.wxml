@@ -46,7 +46,7 @@
     <van-grid-item text="重置" icon="replay" bindclick="reset" />
   </van-grid>
 
-		<van-datetime-picker show-toolbar='{{false}}' type="time" value="{{ currentDate }}" filter="{{ filter }}" bind:input="onInput" />
+		<van-datetime-picker show-toolbar='{{false}}' type="time" value="{{ currentDate }}" filter="{{ filter }}" bindchange="onDateChanging" bind:input="onInput" />
 
 </van-transition>
 

@@ -2,7 +2,8 @@
   <van-notify safeAreaInsetTop="{{true}}" id="van-notify" />
 
   <view class="remind-top">
-    <text class="title" wx:if="{{remindList.length > 0}}">時 移</text>
+    <text class="title" wx:if="{{remindList.length > 0}}"
+		 bindtap="toggleNight">時 移</text>
     <text class="title" wx:else>Add A Reminder</text>
   </view>
 
@@ -24,7 +25,7 @@
             </view>
           </view>
           <view class="remind-item_mid">
-            <input class="{{item.past ? 'item-input_past':'item-input'}}" type="text" focus="{{item.focus}}" value="{{item.title}}" maxlength="18" data-index="{{index}}" catchfocus="inputFocus" bindblur="inputBlur" disabled="{{showPopup}}" bindinput="inputChange"
+            <input class="{{item.past ? 'item-input_past': !!isNight ? 'item-input input-night' : 'item-input'}}" type="text" focus="{{item.focus}}" value="{{item.title}}" maxlength="18" data-index="{{index}}" catchfocus="inputFocus" bindblur="inputBlur" disabled="{{showPopup}}" bindinput="inputChange"
             />
             <view class="item-setTime" wx:if="{{!!item.date.dateStr}}">
               <text class="setTime-date" selectable="false" space="false" decode="false">
@@ -38,7 +39,7 @@
             <text wx:if="{{!!item.locationObj.name}}" class="item-address">{{item.locationObj.name}}</text>
           </view>
           <van-transition show="{{item.focus}}" class="remind-right" name="fade">
-            <image style="width:56rpx;height:56rpx" class="right-info" src="../../images/info.svg" mode="aspectFit" data-item="{{item}}" data-index="{{index}}" catchtap="showDetail" />
+            <image style="width:28px;height:28px" class="right-info" src="../../images/info.svg" mode="aspectFit" data-item="{{item}}" data-index="{{index}}" catchtap="showDetail" />
           </van-transition>
         </view>
         <view slot="right" data-index="{{index}}"  bind:tap="navToWait" class="slide right">
@@ -53,17 +54,42 @@
   </scroll-view>
 
   <!-- 新建事项start -->
-  <view class="remind-bottom" bindtap="newRemind">
+<van-transition show="{{ showNewBtn }}" >
+  <view class="{{!!isNight ? 'remind-bottom bottom-night' :'remind-bottom'}}" bindtap="newRemind">
     <image style="width:56rpx;height:56rpx;margin:0 22rpx 0 36rpx" class="right-info" src="../../images/add.png" mode="aspectFit" />
     <text class="new-remind">新提醒事项</text>
   </view>
+</van-transition>
   <!-- 新建事项end -->
 </view>
 
 <!-- 详情弹出层start -->
+
 <van-popup close-on-click-overlay="{{false}}" show="{{ showPopup }}" position="bottom"  
-  duration="160" custom-style="height:70%;background-color:#FFE4E1">
+  duration="160" custom-style="height:75%;background-color:#FFE4E1">
   <!-- Detail子组件 -->
   <Detail bindcloseData="onCloseDeta" bindsaveRemind="saveByDetail" prop-item="{{popupItem}}"></Detail>
 </van-popup>
 <!-- 详情弹出层end -->
+<view class="{{!!isNight ? 'background night': 'background'}}">
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+  <text></text>
+</view>

@@ -16,7 +16,7 @@
       <van-transition show="{{ isOnDate }}" custom-class="block" name="fade">
         <van-cell title="闹钟" value="{{dateText}}" size="large" center="{{true}}" bind:click="isDatePick"></van-cell>
         <van-transition show="{{ showDatePick }}" custom-class="block" name="slide-left">
-          <van-datetime-picker type="datetime" value="{{ currentDate }}" bind:input="onTimeInput" formatter="{{ formatter }}" bind:confirm="onComfirm" bind:cancel="onCancel" />
+          <van-datetime-picker bind:change='onDateChanging' type="datetime" value="{{ currentDate }}" bind:input="onTimeInput" formatter="{{ formatter }}" bind:confirm="onComfirm" bind:cancel="onCancel" />
         </van-transition>
         <van-cell bind:click="isRepeat" is-link value="{{item.repeat.name}}" title="重复" size="large" center="{{true}}"></van-cell>
       </van-transition>

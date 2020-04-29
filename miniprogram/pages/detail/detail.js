@@ -160,12 +160,16 @@ Component({
       })
       that.saveItem()
     },
+ 		// 时间选择器
+		onDateChanging() { 
+			wx.vibrateShort({})
+		},
     onTimeInput(e) {
       this.setData({
         currentDate: e.detail
       });
     },
-    isDatePick() { // 具体时间选择
+    isDatePick() {
       this.setData({
         showDatePick: true
       })
@@ -173,7 +177,6 @@ Component({
     onComfirm() { // 确认时间选择
       let that = this
       var dateText = !!this.data.currentDate ? _formatTime(new Date(this.data.currentDate)) : '';
-
       this.setData({
         showDatePick: false,
         dateText,
@@ -185,8 +188,9 @@ Component({
       this.setData({
         showDatePick: false
       })
-
     },
+ 		// 时间选择器end
+
     isRepeat() { // 如何重复
       this.setData({
         showRepeatPopup: true

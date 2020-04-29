@@ -24,7 +24,8 @@ Page({
   },
   page: {
     timeTemp: 0, // 中转储存time
-    currentDateStr: 0 // 当前时间时间戳
+    currentDateStr: 0, // 当前时间时间戳
+		title: ''
   },
   onLoad: function(options) {
     let that = this
@@ -55,6 +56,7 @@ Page({
         }
       })
     }
+		that.page.title = !!options.title ? options.title : ''
     this.setData({
       index: options.index
     }, this._getTaskData()) // 加載主數據庫
@@ -71,6 +73,19 @@ Page({
           let remindList = [...res.data[0].remindList],
             counterId = res.data[0]._id,
             task = remindList[that.data.index];
+					if (!!that.page.title && task.title !== that.page.title) { // 通过title判断
+						wx.showToast({
+							title: '该任务已不存在',
+							icon: 'none',
+							image: '',
+							duration: 600,
+							mask: true
+						})
+						wx.navigateTo({
+							url: '../main/main'
+						})
+						return
+					}
           console.log(task)
           that.setData({
             task,
@@ -159,7 +174,9 @@ Page({
     countDown.reset();
     this._updateMainCloudList(this.data.time)
   },
-
+	onDateChanging() { // 滑动timepicker振动
+		wx.vibrateShort({})
+	},
   onChange(e) {
     this.setData({
       timeData: e.detail
