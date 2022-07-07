@@ -6,7 +6,7 @@
   "dependencies": {
     "@vant/weapp": "^1.2.0",
     "miniprogram-sm-crypto": "^0.1.0",
-    "moment": "^2.24.0"
+    "moment": "^2.29.4"
   },
   "devDependencies": {},
   "scripts": {
